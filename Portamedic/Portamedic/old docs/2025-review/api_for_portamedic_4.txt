@@ -1,0 +1,48 @@
+SOURCE: api_for_portamedic_4.png
+============================================================
+
+WebService1
+
+Click here for a complete list of operations.
+
+MakeReservation
+
+Test
+
+To test the operation using the HTTP POST protocol, click the 'Invoke' button.
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strAccountNumber: 03034
+intAge: 50
+intAmount: 500000
+strGender: Male
+strUniqueID: 123
+strZipCode: 99999
+strExceptionProduct: (empty)
+strApplicationState: NY
+datReservation: 12/25/2015
+strExaminerID: NSC00000000000000000000020820587
+strTime: 1:00 PM
+strSpecialInstruction: This is a test.
+
+Successful Return XML Sample
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseObject xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsSuccessful>true</IsSuccessful>
+  <ConfirmationNumber>bea5cf96-dc25-4390-adfa-76e6cb2973a5</ConfirmationNumber>
+  <ErrorMessage/>
+  <ClientID>123</ClientID>
+</ResponseObject>
+
+Unsuccessful Return XML Sample – Message is time/examiner selected is no longer available
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseObject xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsSuccessful>false</IsSuccessful>
+  <ConfirmationNumber/>
+  <ErrorMessage>Specified time is not available for this examiner - 1:00 PM - WRONGINFOHERE---------- :o)</ErrorMessage>
+  <ClientID>123</ClientID>
+</ResponseObject>

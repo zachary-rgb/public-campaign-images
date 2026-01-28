@@ -1,0 +1,53 @@
+SOURCE: api_for_portamedic_1.png
+============================================================
+
+SOAP 1.1
+
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/CheckAvailability"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CheckAvailability xmlns="http://tempuri.org/">
+      <strUserName>string</strUserName>
+      <strUserPassword>string</strUserPassword>
+      <strAccountNumber>string</strAccountNumber>
+      <intAge>short</intAge>
+      <intAmount>int</intAmount>
+      <strGender>string</strGender>
+      <strUniqueID>string</strUniqueID>
+      <strZipCode>string</strZipCode>
+      <strExceptionProduct>string</strExceptionProduct>
+      <strApplicationState>string</strApplicationState>
+      <datReservation>dateTime</datReservation>
+    </CheckAvailability>
+  </soap:Body>
+</soap:Envelope>
+
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CheckAvailabilityResponse xmlns="http://tempuri.org/">
+      <CheckAvailabilityResult>
+        <ArrayOfString>
+          <string>string</string>
+          <string>string</string>
+        </ArrayOfString>
+        <ArrayOfString>
+          <string>string</string>
+          <string>string</string>
+        </ArrayOfString>
+      </CheckAvailabilityResult>
+    </CheckAvailabilityResponse>
+  </soap:Body>
+</soap:Envelope>

@@ -1,0 +1,53 @@
+SOURCE: api_for_portamedic_2.png
+============================================================
+
+CheckAvailability
+
+Test
+
+To test the operation using the HTTP POST protocol, click the 'Invoke' button.
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strAccountNumber: 03034
+intAge: 50
+intAmount: 500000
+strGender: Male
+strUniqueID: 123
+strZipCode: 99999
+strExceptionProduct: (empty)
+strApplicationState: NY
+datReservation: 12/25/2015
+
+Sample Return XML with Examiner ID's and available times
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ArrayOfArrayOfString xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ArrayOfString>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+  </ArrayOfString>
+  <ArrayOfString>
+    <string>1:00 PM</string>
+    <string>1:15 PM</string>
+    <string>1:30 PM</string>
+    <string>1:45 PM</string>
+    <string>2:00 PM</string>
+    <string>2:15 PM</string>
+    <string>2:30 PM</string>
+    <string>2:45 PM</string>
+    <string>3:00 PM</string>
+    <string>3:15 PM</string>
+    <string>3:30 PM</string>
+  </ArrayOfString>
+</ArrayOfArrayOfString>

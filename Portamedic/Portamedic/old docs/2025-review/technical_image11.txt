@@ -1,0 +1,9 @@
+SOURCE: Technical connectivity - image11.png
+============================================================
+
+WebService1 - OfficeCoveringZipCode Test
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strZipCode: 11364

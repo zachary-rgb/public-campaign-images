@@ -1,0 +1,20 @@
+SOURCE: Technical connectivity - image7.png
+============================================================
+
+WebService1 - MakeReservation Test
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strAccountNumber: 03034
+intAge: 50
+intAmount: 500000
+strGender: Male
+strUniqueID: 123
+strZipCode: 99999
+strExceptionProduct: (empty)
+strApplicationState: NY
+datReservation: 12/25/2015
+strExaminerID: NSC00000000000000000000020820587
+strTime: 1:00 PM
+strSpecialInstruction: This is a test.

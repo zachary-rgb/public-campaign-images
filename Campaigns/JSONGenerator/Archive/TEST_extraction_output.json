@@ -1,0 +1,19 @@
+[
+  {
+    "Campaign Name": "Takeda Vitiligo WeConnect",
+    "Message Name": "Email 1",
+    "Language": "en-us",
+    "Email Subject": "Reminder: Enrollment is open for vitiligo clinical trials",
+    "Banner Headline": "Learn about clinical trials that may help vitiligo treatments",
+    "Study Information": "Living with vitiligo can be challenging, but staying informed can help you take control of your health.\nConsider learning about vitiligo clinical trials that are actively enrolling by joining WeConnect, an online registry offering access to health information, peer support, and updates on clinical trials that may be right for you.\nIf you struggle with vitiligo and are 18 years of age or older, you may be matched to an active clinical trial.\nParticipation is voluntary and confidential, and there is no obligation to enroll in a clinical trial. The registry simply helps connect you to trials that may be relevant to your condition.\nLearn more: [Insert Link]\nYour participation may help advance research and improve care for you and others living with vitiligo.\nThank you for considering WeConnect!",
+    "CTA 1": "Learn more [INSERT CTA BUTTON]",
+    "Eligibility": "If you struggle with vitiligo and are 18 years of age or older, you may be matched to an active clinical trial.",
+    "What to Expect": "What to expect if you qualify: N/A (Educational Content Only)",
+    "CTA 2": "Learn more [INSERT CTA 2 BUTTON]",
+    "Closing": "",
+    "Optional Resource": "",
+    "Hero Image (URL)": "Option 1",
+    "URL/UTM": "https://example.com/register",
+    "End Matter (Enter Sponsor)": "Takeda"
+  }
+]

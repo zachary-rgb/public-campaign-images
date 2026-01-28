@@ -1,0 +1,28 @@
+0:01 Hey guys, so I'm going to show how you can run the integrations project in test if that's working or not So first of all, you can go to the to the web app, right?
+0:11 So Run your make dev. This will also run the ready service, uh because we we need we need a ready server on the integrations API.
+0:23 So here you can go to the API folder and then you can just run start up. And that's pretty much it.
+0:37 Now on the web app what you can do we have servers that is for testing so I'm going to just use one.
+0:46 So the simplest one is the VDoc, right? So I basically created one test study for each integration we have so it's easy, easier to test that particular integration.
+0:59 So let's say you import VDoc, right? When you go to VDoc you need to go to settings That should be good to go.
+1:15 Also when you go here, just make sure you have this enabled, right? So VDoc we have this guy right here.
+1:27 This is enabled. If you want to double check, just do this. Okay, so now how does that work? So let's create a participant on VDoc.
+1:54 I'm creating here. So let's complete that. Okay, so we have age and gender, right? So now you can check in the integrations tab here is the data that we are processing for this guy.
+2:12 So basically, we just send events to the integrations API and from that event, we process, we aggregate just the data that's related with the integrations.
+2:24 We don't store everything. We basically, we choose exactly what we want to get from each event and then we save that in Redis, right?
+2:33 And everything is based on the participant UUID. And why we do that? Because the UUID is a universal, unique identifier, so it doesn't matter like which environment it's hitting the the lambda, we can ensure we won't have conflicts, right?
+2:51 So, like, because we only have dev and prod, right? So the dev is related to related with all lower environments, and prod is related to prod, right?
+3:02 So, since we have several environments, uh, sending events, we could have issues. So, the key here on Red is the UUID, right?
+3:12 And you can, You can see, here, you have the forms. The form is all the data we get from the forms.
+3:20 So, everything that is configured on the trial builder will end up here. So, we basically just grab the value from every field that is configured.
+3:29 And we save it here, inside this object. So, you can see here, this basically, we are using a key value, uh, database.
+3:39 And the value in this case is always a JSON object. So, we basically just, it's kind of like a collection, let's say, right?
+3:47 So, everything is an object here. And inside services, you can see like if the, which service was integrated successfully or not.
+3:58 And on the integrations object, you can see the data model. So, if we create something that have an ID or we want to signal that we pass through a specific step, we're going to store inside this object, right?
+4:14 So, to continue this, we can go here. So, often times you need to refresh here because we have cache from GraphQL.
+4:45 Okay, so. We can check here what happened. So, this is the integrations and you can see like all everything that's going on here.
+4:53 You can see vDoc ready to start. So, we started to uhm to uhm we started the vDoc implementation. We are sending a lot of data here, but then we have an error here, right?
+5:08 So, the error is probably related with authentication. So, let's check how this looks like. This is good to know.
+5:18 So, we can debug here. Okay, so you can see here inside services we have vdoc false and we have the error, right?
+5:26 So, you will see on the events controller, we, if something goes wrong inside the services, we return an error. To the event controller and then we save it in the participant object, right?
+5:39 So, we try to keep this object up to date on how things are going. So, if things are successful, we will start here.
+5:47 If things fail, we will start here. And that works for every service, basically. So, that's basically how you test and how you debug here.

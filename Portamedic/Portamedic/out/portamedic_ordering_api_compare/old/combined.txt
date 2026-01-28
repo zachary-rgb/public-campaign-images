@@ -1,0 +1,322 @@
+=== DOCUMENT TEXT ===
+CLINICAL CONNECTIVITY
+Ordering API process
+
+Clinical ordering service
+
+Portamedic Endpoints
+Sandbox authentication - https://auth.integratedtestingservices.com:8020/TokenService/connect/token
+Production authentication - https://auth.appslive.com:8020/TokenService_stage/connect/token
+Sandbox – TBD
+Production – TBD
+
+Submitting a New Case
+Calling the new case Restful service is a two-step process.
+Retrieve an OAuth2 token from the token service. 
+Post order data in JSON (see JSON schema) format to API with the token (previous step).  
+You must call the authentication API with your credentials (Supplied by Portamedic) for a token.  The token must then be passed with your subsequent orders to the new order API.  The token typically expires in 5 minutes; you can request a new token with each call or use the token until it expires and request a new one.
+
+Calling the Token Service
+The following curl call can be used to demonstrate the token service, client_id and client_secret will be provided by Portamedic:
+curl -d “grant_type=client_credentials&client_id=CLIENTID&client_secret=CLIENTSECRET" https://auth.integratedtestingservices.com:8020/TokenService/connect/token
+Verb: Post
+Body: grant_type=client_credentials&client_id=CLIENTID&client_secret=CLIENTSECRET
+Response Codes 
+200 Success
+401 Authentication error
+400 Bad Request 
+
+Response Body:        
+{  
+  "access_token": "eyJhJdLCJjbGllbnRfaWQiOiJiMWFhZTZiZS1iNThiLTR.........TBQe_BmQ",
+  "expires_in": 300,
+  "token_type": "Bearer",
+  "scope": "Clinical.Originator"
+}
+
+Calling New Case Rest Service
+URL: TBD
+Verb: POST
+Headers: content-type: application/json
+        authorization:  Bearer [Token string]
+Body: see attached files for ordering service on single subject or facility visit.
+Response Codes 
+200 Success
+401 Authentication error
+400 Bad Request
+Response Body: JSON format order complete with Portamedic internal IDs and reference (Case number) attached sample response.
+
+Example order:
+{
+  Your account number provided by Portamedic
+  "accountNumber": 99999,
+  "serviceSet": {
+    Service name if applicable 
+    "name": "PAD blood marker study",
+    Agreed upon id for service 
+    "refID": "7340AFB",
+    Ala cart service list
+    "services": [
+      {
+        "serviceName": "Blood draw",
+        "serviceCode": 56,
+        "serviceDesc": "Blood Draw",
+        "specialInstruction": "Fill blue tube only"
+      },
+      {
+        "serviceName": "V ultrasound",
+        "serviceCode": 37,
+        "serviceDesc": "Vein ultrasound",
+        "specialInstruction": "utra sound both legs below the knee to above the ankle"
+      }
+    ]
+  },
+  Person to be contacted by field office / service provider in case of issue
+  "contactPersonName": "Jane Doe",
+  "contactPhone": "1234568899",
+  "contactEmail": "support@clinical.com",
+  Client
+  "subject": {
+    "subjectType": "PERSON",
+    "age": 56,
+    "firstName": "Fred",
+    "middleName": "I",
+    "lastName": "TestSubject",
+    "addresses": [
+      {
+        "addressType": "BUSINESS",
+        "line1": "12 Bussines Ave",
+        "stateAbbr": "NV",
+        "city": "Smithville",
+        "zipCode": "11738-222"
+      },
+      {
+        "addressType": "HOME",
+        "line1": "12 Home Way",
+        "stateAbbr": "NV",
+        "city": "Smithville",
+        "zipCode": "11738-222",
+        Address where service will be preformed
+        "serviceAddress": true
+      }
+    ],
+    "phones": [
+      {
+        "phoneType": "BUSINESS",
+        "phoneNumber": "5557889967",
+        "ext": "234"
+      },
+      {
+        "phoneType": "MOBILE",
+        "phoneNumber": "5558675309"
+      },
+      {
+        "phoneType": "HOME",
+        "phoneNumber": "3446789012"
+      }
+    ],
+    "emails": [
+      {
+        "emailType": "PERSONAL",
+        "address": "TestGuy1256@google.com"
+      },
+      {
+        "emailType": "BUSINESS",
+        "address": "FTestSubject@WorkCo.com"
+      }
+    ]
+  },
+  "instructions": "Please call client ahead of time",
+  "appointment": "2022-04-16 15:30:00",
+  "durationMinutes": 30,
+  Your reference number for the order
+  "refNumber": "739302-3333",
+  Your internal ID if necessary 
+  "ExternalGuid": "00000000-0000-0000-0000-000000000000"
+}
+
+Sample response:
+{
+  "visitType": "CLINIC",
+  "fieldOfficeNumber": "04500",
+  "accountNumber": 77777,
+  "status": "ENTERED",
+  "statusdate": null,
+  "appsLinkStatus": "0",
+  "serviceSet": {
+    "refID": 11111,
+    "name": "SCAN4",
+    "services": null
+  },
+  "contactPersonName": "Fred I Contact",
+  "contactPhone": "(800)867-5309",
+  "contactEmail": "Support@client.com",
+  "siteNumber": null,
+  "kitID": "DF7383820-000078",
+  "subject": {
+    "subjectType": “FACILITY”,
+    "ssn": null,
+    "licenseNumber": null,
+    "age": null,
+    "dob": null,
+    "subjectID": null,
+    "firstName": null,
+    "middleName": null,
+    "lastName": null,
+    "name": "Novex Health Clinic",
+    "addresses": [
+      {
+        "addressType": "BUSINESS",
+        "line1": "852 Test Ave",
+        "line2": "Suite 101",
+        "line3": null,
+        "stateAbbr": null,
+        "state": "NC",
+        "city": "Noplacia",
+        "zipCode": "28212",
+        "serviceAddress": true,
+        "parentID": "CLIN1000000000000000000458591261",
+        "id": "CLIN1000000000000000000458591262",
+        "userName": "TestClinicalClient"
+      }
+    ],
+    "phones": [
+      {
+        "phoneType": "BUSINESS",
+        "phoneNumber": "7375665555",
+        "ext": null,
+        "parentID": "CLIN1000000000000000000458591261",
+        "id": "CLIN1000000000000000000458591264",
+        "userName": "TestClinicalClient"
+      },
+      {
+        "phoneType": "FAX",
+        "phoneNumber": "7375665556",
+        "ext": null,
+        "parentID": "CLIN1000000000000000000458591261",
+        "id": "CLIN1000000000000000000458591265",
+        "userName": "TestClinicalClient"
+      }
+    ],
+    "emails": [
+      {
+        "emailType": "BUSINESS",
+        "address": "Novex_Noplacia@NovexHealth.com",
+        "parentID": "CLIN1000000000000000000458591261",
+        "id": "CLIN1000000000000000000458591263",
+        "userName": "TestClinicalClient"
+      }
+    ],
+    "id": "CLIN1000000000000000000458591261",
+    "userName": "TestClinicalClient"
+  },
+  "drName": null,
+ Portamedics reference Number
+  "caseNumber": "CLIN1A347226",
+  "externalGuid": "00000000-0000-0000-0000-000000000000",
+  "refNumber": "AH7838-093333",
+  "originator": {
+    "name": null,
+    "addresses": null,
+    "phones": null,
+    "emails": null,
+    "id": "NSC00L00000000000000000000141270",
+    "userName": null
+  },
+  Servicing Field Office
+  "owningOffice": {
+    "officeNumber": "04500",
+    "name": "Charlotte, North Carolina",
+    "addresses": [
+      {
+        "addressType": "BUSINESS",
+        "line1": "1515 Mockingbird Lane",
+        "line2": "907",
+        "line3": null,
+        "stateAbbr": "NC",
+        "state": null,
+        "city": "Charlotte",
+        "zipCode": "28209",
+        "serviceAddress": null,
+        "parentID": null,
+        "id": "OFFICE00000000000000000000004500",
+        "userName": null
+      }
+    ],
+    "phones": [
+      {
+        "phoneType": "BUSINESS",
+        "phoneNumber": "704 522 0392",
+        "ext": null,
+        "parentID": null,
+        "id": null,
+        "userName": null
+      },
+      {
+        "phoneType": "FAX",
+        "phoneNumber": "704 522 1472",
+        "ext": null,
+        "parentID": null,
+        "id": null,
+        "userName": null
+      }
+    ],
+    "emails": [
+      {
+        "emailType": "BUSINESS",
+        "address": "mdelguidice@appshq.com",
+        "parentID": null,
+        "id": null,
+        "userName": null
+      }
+    ],
+    "id": "OFFICE00000000000000000000004500",
+    "userName": null
+  },
+  "examiner": null,
+  Initial Status event
+  "events": [
+    {
+      "code": "INFO",
+      "message": "On site clinic visit",
+      "eventDate": "2022-12-01T11:23:14.5754089-05:00",
+      "appsLinkCode": "0",
+      "parentID": "CLIN1000000000000000000458591266",
+      "id": "CLIN1000000000000000000458591271",
+      "userName": "TestClinicalClient"
+    }
+  ],
+  "notes": null,
+  "attachments": null,
+  "instructions": "Please arrive 15 minutes prior to start",
+  "appointment": null,
+  "durationMinutes": 240,
+  "id": "CLIN1000000000000000000458591266",
+  "userName": "TestClinicalClient"
+}
+Attachments:
+
+=== OCR (IMAGES -> TEXT) ===
+
+--- IMAGE: image1.png ---
+DECEMBER 1, 2022
+PORTAMEDIC, INC.
+
+--- IMAGE: image2.jpg ---
+¥ Fas e=mnaic
+? F UO OC8i fF iD iiz.
+
+--- IMAGE: image3.png ---
+‘a
+PersonOrder.json
+
+--- IMAGE: image4.png ---
+~
+
+--- IMAGE: image5.png ---
+ClinicalCaseSchema
+jsd
+
+--- IMAGE: image6.png ---
+6
+Facility.json

@@ -1,0 +1,33 @@
+Campaign Staging Context
+
+we use OAuth 2.0 to generate access tokens
+https://staging.auth.curebase.com/api/reference
+
+
+this is the endpoint that you should use to get a new token
+GET
+Server:https://staging.auth.curebase.com/api/v1/oauth/authorize
+
+POST 
+https://staging.auth.curebase.com/api/v1/oauth/token​
+
+Query Parameters
+client_idCopy link to client_id
+Type:string
+response_typeCopy link to response_type
+enum
+const:  
+code
+required
+code
+redirect_uriCopy link to redirect_uri
+Type:string
+Format:uri
+stateCopy link to state
+Type:string
+
+
+Testing endpoint:
+https://staging.campaigns.walgreens.curebase.com/api/v1/recipients/bulk​
+
+Test using OPTIONS method first

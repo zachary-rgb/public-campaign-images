@@ -1,0 +1,21 @@
+SOURCE: Technical connectivity - image13.png
+============================================================
+
+SOAP 1.1 - OfficeCoveringZipCode
+
+Request Parameters:
+- strUserName: string
+- strUserPassword: string
+- strZipCode: string
+
+Response:
+- OfficeNumber: string
+- DisplayName: string
+- Street: string
+- AptNumber: string
+- City: string
+- State: string
+- ZipCode: string
+- Phone: string
+- Fax: string
+- EmailAlias: string

@@ -1,0 +1,50 @@
+SOURCE: 3.docx
+============================================================
+
+
+?
+Make Reservation
+The carrier will pass the same parameters they used to check availability; however, they will also include
+the selected Examiner ID and available time selected as illustrated
+below.
+SOAP 1.1
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/MakeReservation"
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<MakeReservation xmlns="http://tempuri.org/">
+<strUserName>string</strUserName> <strUserPassword>string</strUserPassword>
+<strAccountNumber>string</strAccountNumber>
+<intAge>short</intage>
+<intAmount>int</intAmount>
+<strGender>string</strGender>
+<strUniqueID>string</strUniqueID>
+<strZipCode>string</strZipCode>
+<strExceptionProduct>string</strExceptionProduct>
+<strApplicationState>string</strApplicationState>
+<datReservation>dateTime</datReservation>
+<strExaminerID>string</strExaminerID>
+<strTime>string</strTime>
+<strSpecial Instruction>string</strSpecial Instruction>
+</MakeReservation>
+</soap:Body>
+</soap:Envelope>
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<MakeReservationResponse xmlns="http://tempuri.org/">
+<MakeReservationResult>
+<IsSuccessful>boolean</IsSuccessful>
+<ConfirmationNumber>string</ConfirmationNumber>
+<ErrorMessage>string</ErrorMessage>
+<ClientID>string</ClientID>
+</MakeReservationResult>
+</MakeReservationResponse>
+</soap:Body>
+</soap:Envelope>
