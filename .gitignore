@@ -1,9 +1,13 @@
 # Ignore everything by default
 *
 
-# But allow image folders (campaign_images_* format)
-!campaign_images_*/
-!campaign_images_*/**
+# But allow specific directories needed for image uploads
+!JSONGenerator/
+JSONGenerator/*
+
+# Allow image folders inside JSONGenerator (campaign_images_* format)
+!JSONGenerator/campaign_images_*/
+!JSONGenerator/campaign_images_*/**
 
 # Allow .gitignore itself
 !.gitignore
