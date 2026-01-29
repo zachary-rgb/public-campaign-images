@@ -1,0 +1,12 @@
+SOURCE: Technical connectivity - image10.png
+============================================================
+
+Successful Return XML Sample
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseObject xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsSuccessful>true</IsSuccessful>
+  <ConfirmationNumber>bea5cf96-dc25-4390-adfa-76e6cb2973a5</ConfirmationNumber>
+  <ErrorMessage/>
+  <ClientID>123</ClientID>
+</ResponseObject>

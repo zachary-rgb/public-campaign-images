@@ -1,0 +1,68 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║     WALGREENS CAMPAIGN CONTENT EXTRACTOR                       ║
+║     Extract Word Doc → Google Sheets                           ║
+║                                                                ║
+║  ✓ Auto Campaign Name   ✓ [X] Checkboxes   ✓ Color Detection  ║
+╚════════════════════════════════════════════════════════════════╝
+
+⭐ NEW: Campaign Names auto-extracted from document headers!
+⭐ NEW: Sponsors use [X] text markers to select options!
+
+📖 QUICK START - Choose Your Method:
+
+┌─────────────────────────────────────────────────────────────┐
+│  ⭐ EASIEST: GUI Window (Recommended for most users)        │
+│                                                             │
+│  👉 DOUBLE-CLICK: Extract_Campaign_Content_GUI.bat          │
+│                                                             │
+│  A friendly window will open. Fill in your details,        │
+│  click Extract, and paste into Google Sheets!               │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│  💨 FAST: Simple Prompts                                    │
+│                                                             │
+│  👉 DOUBLE-CLICK: Extract_Campaign_Content.bat              │
+│                                                             │
+│  Answer a few questions, then paste into Google Sheets      │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│  📝 ADVANCED: Add Button to Word Document                   │
+│                                                             │
+│  👉 READ: SIMPLE_USAGE_GUIDE.md (Section: Method 3)         │
+│                                                             │
+│  Extract content by clicking a button in your Word doc      │
+└─────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION:
+
+  • SIMPLE_USAGE_GUIDE.md ........ Step-by-step for all methods
+  • QUICK_START.md ............... Quick reference guide
+  • README_EXTRACTOR.md .......... Complete technical docs
+
+═══════════════════════════════════════════════════════════════
+
+❓ NEED HELP?
+
+  Problem: Can't find .bat files
+  Solution: Make sure you're in the JSONGenerator folder
+
+  Problem: Python not found error  
+  Solution: Install Python from Microsoft Store
+
+  Problem: Nothing happens when clicking
+  Solution: Right-click .bat file → "Run as administrator"
+
+═══════════════════════════════════════════════════════════════
+
+✨ THAT'S IT! Choose a method above and extract your content!
+
+   Content will be automatically copied to your clipboard.
+   Just paste it into Google Sheets with Ctrl+V.
+
+═══════════════════════════════════════════════════════════════
+

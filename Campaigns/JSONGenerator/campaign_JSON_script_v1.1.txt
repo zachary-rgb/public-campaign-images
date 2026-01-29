@@ -1,0 +1,652 @@
+/***********************************
+ *  WALGREENS EMAIL TEMPLATE CONFIG
+ ***********************************/
+var EMAIL_TEMPLATES = {
+  "Walgreens": {
+    layout: {
+      backdropColor: "#DED5D0",
+      canvasColor: "#FFFFFF",
+      textColor: "#262626",
+      fontFamily: "MODERN_SANS",
+      borderRadius: 20
+    },
+    logoBlock: {
+      padding: { top: 16, right: 24, bottom: 16, left: 24 },
+      width: 200
+    },
+    heroBlock: {
+      padding: { top: 0, right: 24, bottom: 24, left: 24 },
+      width: 500,
+      textAlign: "center"
+    },
+    headingBlock: {
+      padding: { top: 12, right: 12, bottom: 12, left: 12 },
+      backgroundColor: "#A32A33",
+      textColor: "#FAFAFA",
+      textAlign: "center",
+      level: "h1",
+      fontSize: 24
+    },
+    divider1: {
+      color: "#D4D4D4",
+      padding: { top: 16, right: 28, bottom: 16, left: 28 }
+    },
+    bodyBlock: {
+      textColor: "#525252",
+      fontSize: 14, // spec: 12 internal, 14 external
+      padding: { top: 16, right: 24, bottom: 16, left: 24 }
+    },
+    ctaBlock: {
+      padding: { top: 16, right: 24, bottom: 16, left: 24 },
+      textAlign: "center",
+      buttonBackgroundColor: "#E62600",
+      buttonStyle: "pill",
+      textColor: "#FFFFFF",
+      fontSize: 18,
+      fontWeight: "bold"
+    },
+    wbaInfoBlock: {
+      // available if you want a separate "Walgreens info" box later
+      textColor: "#A32A33",
+      fontSize: 10,
+      fontWeight: "bold",
+      textAlign: "center",
+      padding: { top: 16, right: 24, bottom: 16, left: 24 }
+    },
+    divider2: {
+      color: "#CCCCCC",
+      padding: { top: 16, right: 24, bottom: 16, left: 24 }
+    },
+    optionalResourceBlock: {
+  textColor: "#A32A33",
+  fontSize: 10,
+  fontWeight: "bold",
+  textAlign: "center",
+  padding: { top: 16, right: 24, bottom: 16, left: 24 }
+    },    
+    endMatterBlock: {
+      backgroundColor: "#f4f2ef",
+      textColor: "#525252",
+      fontSize: 10,
+      fontWeight: "normal",
+      textAlign: "center",
+      padding: { top: 8, right: 8, bottom: 8, left: 8 }
+    }
+  }
+};
+
+function buildSmsAsEmailLayoutJson(row) {
+  var tmpl = getTemplateForRow(row);
+
+  // SMS body entered in Study Information only
+  var smsBody = String(row["Study Information"] || "");
+  smsBody = replaceMergeFields(smsBody, row); // replaces [Add URL] + name brackets, etc.
+
+  // Normalize whitespace a bit (optional, but helps SMS readability)
+  smsBody = smsBody
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+
+  var json = {
+    "root": {
+      "type": "EmailLayout",
+      "data": {
+        "backdropColor": tmpl.layout.backdropColor,
+        "borderRadius": tmpl.layout.borderRadius,
+        "canvasColor": tmpl.layout.canvasColor,
+        "textColor": tmpl.layout.textColor,
+        "fontFamily": tmpl.layout.fontFamily,
+        "childrenIds": [
+          "block-study-information"
+        ]
+      }
+    },
+
+    "block-study-information": {
+      "type": "Text",
+      "data": {
+        "style": {
+          "color": tmpl.bodyBlock.textColor,
+          "fontSize": tmpl.bodyBlock.fontSize,
+          "padding": tmpl.bodyBlock.padding
+        },
+        "props": {
+          // Keep the same paragraph logic + ewa-rteLine you use for email text blocks
+          "text": textToDivHtml(smsBody, row)
+        }
+      }
+    }
+  };
+
+  return json;
+}
+
+
+
+/***********************
+ *  MENU
+ ***********************/
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('Email JSON')
+    .addItem('Generate JSON for selected row', 'generateJsonForSelectedRow')
+    .addToUi();
+}
+
+/***********************
+ *  HELPERS
+ ***********************/
+function isSmsRow(row) {
+  return /sms/i.test(String(row["Message Name"] || ""));
+}
+
+function replaceMergeFields(text, row) {
+  if (!text) return "";
+  row = row || {};
+
+  var s = String(text);
+
+  // 1) Replace [Add URL] first
+  var url = String(row["URL/UTM"] || "").trim();
+  if (url) {
+    s = s.replace(/\[\s*add\s*url\s*\]/gi, url);
+  }
+
+  // 2) Replace any remaining bracketed placeholder with first name
+  // (covers [Patient First Name], [nombre del paciente], etc.)
+  s = s.replace(/\[\s*(patient\s*first\s*name|nombre\s+del\s+paciente)\s*\]/gi, "{{recipient.firstName}}");
+
+
+  return s;
+}
+
+
+function buildSmsJson(row) {
+  var language = row["Language"] || "en-us";
+
+  // Only use Study Information as body template
+  var smsBody = String(row["Study Information"] || "");
+
+  // Apply merge fields + [Add URL] replacement
+  smsBody = replaceMergeFields(smsBody, row);
+
+  // Normalize whitespace for SMS readability
+  smsBody = smsBody
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+
+  // Minimal SMS payload (adjust keys if your platform expects different)
+  return {
+    "type": "SmsMessage",
+    "data": {
+      "language": language,
+      "text": smsBody
+    }
+  };
+}
+
+
+function rowToObject(headers, row) {
+  var obj = {};
+  headers.forEach(function(h, i) {
+    obj[h] = row[i];
+  });
+  return obj;
+}
+
+function getTemplateForRow(row) {
+  // Only Walgreens for now; easy to extend later if you have other sponsors
+  return EMAIL_TEMPLATES["Walgreens"];
+}
+
+function textToDivHtml(text, row) {
+  if (!text) return "";
+
+  text = replaceMergeFields(text, row);
+
+  var normalized = String(text).replace(/\r\n/g, "\n");
+  var paragraphs = normalized.split(/\n{2,}/);
+
+  return paragraphs
+    .map(function(p) { return p.trim(); })
+    .filter(function(p) { return p.length > 0; })
+    .map(function(p) {
+
+      // Escape HTML (must be first!)
+      var escaped = p
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      // Apply bold/italic formatting (markdown-like)
+      escaped = applyInlineFormatting(escaped);
+
+      // Convert single line breaks to <br>
+      escaped = escaped.replace(/\n/g, "<br/>");
+
+      return '<p class="ewa-rteLine" style="text-align: left;">' + escaped + '</p>';
+
+    })
+    .join("");
+}
+
+function applyInlineFormatting(text) {
+  if (!text) return text;
+
+  // Bold *text*
+  text = text.replace(/\*(.+?)\*/g, "<strong>$1</strong>");
+  // Italic _text_
+  text = text.replace(/_(.+?)_/g, "<em>$1</em>");
+
+  return text;
+}
+
+function normalizeImageUrl(url) {
+  if (!url) return "";
+
+  var s = String(url).trim();
+
+  // Convert GitHub blob URLs to raw URLs
+  // Example:
+  // https://github.com/org/repo/blob/main/path/image.jpg
+  // → https://raw.githubusercontent.com/org/repo/main/path/image.jpg
+  if (s.indexOf("github.com") !== -1 && s.indexOf("/blob/") !== -1) {
+    s = s
+      .replace("https://github.com/", "https://raw.githubusercontent.com/")
+      .replace("/blob/", "/");
+  }
+
+  return s;
+}
+
+
+/*************************************
+ *  CORE: GENERATE JSON FOR A ROW
+ *************************************/
+function generateJsonForRow(rowIndex) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getActiveSheet();
+
+  var dataRange = sheet.getDataRange();
+  var values = dataRange.getValues();
+  var headers = values[0];
+
+  if (rowIndex <= 1 || rowIndex > values.length) {
+    throw new Error('Row index out of range or header row.');
+  }
+
+  var rowValues = values[rowIndex - 1];
+  var row = rowToObject(headers, rowValues);
+
+var jsonObject = isSmsRow(row) ? buildSmsAsEmailLayoutJson(row) : buildEmailJson(row);
+
+  var campaignName = row["Campaign Name"] || ("row" + rowIndex);
+  var safeName = campaignName.replace(/\s+/g, "");
+  var fileName = "initialEmail_" + safeName + ".json";
+
+  var file = DriveApp.createFile(
+    fileName,
+    JSON.stringify(jsonObject, null, 2),
+    MimeType.PLAIN_TEXT
+  );
+
+  return file.getUrl(); // so callers can use it (checkbox / menu)
+}
+
+/*************************************
+ *  MENU ACTION
+ *************************************/
+function generateJsonForSelectedRow() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getActiveSheet();
+  var active = sheet.getActiveCell();
+  var rowIndex = active.getRow();
+
+  if (rowIndex === 1) {
+    SpreadsheetApp.getUi()
+      .alert('Please select a data row (not the header row).');
+    return;
+  }
+
+  try {
+    var fileUrl = generateJsonForRow(rowIndex);
+    // Put link into column A of that row
+    sheet.getRange(rowIndex, 1)
+      .setFormula('=HYPERLINK("' + fileUrl + '","JSON")');
+    SpreadsheetApp.getUi()
+      .alert("JSON generated for row " + rowIndex);
+  } catch (err) {
+    SpreadsheetApp.getUi()
+      .alert("Error: " + err.message);
+  }
+}
+
+/*************************************
+ *  "BUTTON" VIA CHECKBOX IN COLUMN A
+ *  (INSTALLABLE on-edit trigger)
+ *************************************/
+function onEditGenerate_v1_1(e) {
+  var range = e.range;
+  var sheet = range.getSheet();
+  var row = range.getRow();
+  var col = range.getColumn();
+
+  // Only react on first column (A) and not header row
+  if (col !== 1 || row === 1) return;
+
+  // Optional: limit to one sheet by name
+  // if (sheet.getName() !== 'Campaign Email JSON Generator') return;
+
+  var newValue = e.value;
+
+  // Only act when checkbox is checked (TRUE)
+  if (newValue === "TRUE") {
+    try {
+      var fileUrl = generateJsonForRow(row);
+      // Replace checkbox with hyperlink
+      sheet.getRange(row, col)
+        .setFormula('=HYPERLINK("' + fileUrl + '","JSON")');
+    } catch (err) {
+      SpreadsheetApp.getUi()
+        .alert("Error generating JSON for row " + row + ": " + err.message);
+      // Reset checkbox if error
+      sheet.getRange(row, col).setValue(false);
+    }
+  }
+}
+
+/*************************************
+ *  BUILD EMAIL JSON (COLUMN-BASED BLOCKS)
+ *************************************/
+function buildEmailJson(row) {
+  var tmpl = getTemplateForRow(row);
+
+  var heading = row["Banner Headline"] || "";
+
+  var logoUrl = "/files-email/view/files/email/8f2f783d-bc05-4d21-bf7c-28c4f7d3b7f5/8f2f783d-bc05-4d21-bf7c-28c4f7d3b7f5.png";
+  var heroUrl = normalizeImageUrl(row["Hero Image (URL)"]);
+  var ctaUrl  = row["URL/UTM"] || "#";
+
+  // Language column: "en-us" or "en-es"
+  var language = row["Language"] || "en-us";
+
+  // Sponsor name comes from dedicated column
+  var sponsorName = row["End Matter (Enter Sponsor)"] || "the study sponsor";
+
+  // --- END MATTER HTML (language-specific) ---
+
+  var englishEndMatterHtml =
+    '<p class="ewa-rteLine" style="text-align: center;">The safety and scientific validity of a clinical trial or research study are the responsibility of the study sponsor and investigators. Choosing to participate in a study is a personal decision.</p>' +
+    '<p class="ewa-rteLine" style="text-align: center;">This message is being provided in connection with a study being sponsored by ' + sponsorName + '.</p>' +
+    '<p class="ewa-rteLine" style="text-align: center;">Walgreens is not a medical provider, and the content of this message is not intended to be a substitute for professional medical advice, diagnosis, or treatment. You should always consult a qualified medical professional with any questions you may have regarding a medical condition, treatment, or participation in a clinical trial.</p>' +
+    '<p class="ewa-rteLine" style="text-align: center;"><a href="https://www.walgreens.com/topic/help/generalhelp/privacyandsecurity.jsp" target="_blank" rel="noopener"><u>Privacy Policy</u></a></p>' +
+    '<p class="ewa-rteLine" style="text-align: center;">If you wish to stop receiving Walgreens clinical research messages, click<strong>&nbsp;</strong><a href=\"{{system.unsubscribeUrl}}\" target=\"_blank\" rel=\"noopener\">unsubscribe</a>. To unsubscribe from all other Walgreens messaging, please update your <a href="http://rxorder.walgreens.com/a/hBj2fHQB9cCaVB9dKWvCgXUqt.B9cCaV0z/wg22" target="_blank" rel="noopener"><u>Communication Preferences</u></a> online or call us at 877-250-5823.</p>';
+
+  var spanishEndMatterHtml =
+    '<p class="ewa-rteLine" style="text-align: center;"><span style="font-size: 8pt;">La seguridad y la validez cient&iacute;fica de un ensayo cl&iacute;nico o estudio de investigaci&oacute;n son responsabilidad del patrocinador del estudio y de los investigadores. La decisi&oacute;n de participar en un estudio es personal.</span></p>' +
+    '<p class="ewa-rteLine" style="text-align: center;"><span style="font-size: 8pt;">Este mensaje se proporciona en relaci&oacute;n con un estudio patrocinado por ' + sponsorName + '.</span></p>' +
+    '<p class="ewa-rteLine" style="text-align: center;"><span style="font-size: 8pt;">Walgreens no es un proveedor m&eacute;dico, y el contenido de este mensaje no pretende sustituir el asesoramiento, diagn&oacute;stico o tratamiento m&eacute;dicos profesionales. Siempre debe consultar a un profesional m&eacute;dico cualificado si tiene alguna pregunta sobre una afecci&oacute;n m&eacute;dica, un tratamiento o acerca de la participaci&oacute;n en un ensayo cl&iacute;nico.</span></p>' +
+    '<p class="ewa-rteLine" style="text-align: center;"><span style="font-size: 8pt;"><a href="https://www.walgreens.com/topic/help/generalhelp/privacyandsecurity.jsp" target="_blank" rel="noopener">Pol&iacute;tica de privacidad</a></span></p>' +
+    '<p class="ewa-rteLine" style="text-align: center;"><span style="font-size: 8pt;">Si desea dejar de recibir mensajes sobre investigaciones cl&iacute;nicas de Walgreens, haga clic en <a href="{{system.unsubscribeUrl}}" target="_blank" rel="noopener">cancelar su suscripci&oacute;n</a>. Para cancelar su suscripci&oacute;n a todos los dem&aacute;s mensajes de Walgreens, actualice sus <a href="http://rxorder.walgreens.com/a/hBj2fHQB9cCaVB9dKWvCgXUqt.B9cCaV0z/wg22" target="_blank" rel="noopener">Preferencias de comunicaci&oacute;n</a> en l&iacute;nea o ll&aacute;menos al 877-250-5823.</span></p>';
+
+  var endMatterHtml = (language === "en-es") ? spanishEndMatterHtml : englishEndMatterHtml;
+
+  // --- BASE JSON SKELETON ---
+
+  var json = {
+    "root": {
+      "type": "EmailLayout",
+      "data": {
+        "backdropColor": tmpl.layout.backdropColor,
+        "borderRadius": tmpl.layout.borderRadius,
+        "canvasColor": tmpl.layout.canvasColor,
+        "textColor": tmpl.layout.textColor,
+        "fontFamily": tmpl.layout.fontFamily,
+        "childrenIds": [
+          "block-logo",
+          "block-hero",
+          "block-heading",
+          "block-divider-1"
+        ]
+      }
+    },
+
+    "block-logo": {
+      "type": "Image",
+      "data": {
+        "style": { "padding": tmpl.logoBlock.padding },
+        "props": {
+          "width": tmpl.logoBlock.width,
+          "url": logoUrl,
+          "alt": "Walgreens logo",
+          "linkHref": null,
+          "contentAlignment": "top"
+        }
+      }
+    },
+
+    "block-hero": {
+      "type": "Image",
+      "data": {
+        "style": {
+          "padding": tmpl.heroBlock.padding,
+          "textAlign": tmpl.heroBlock.textAlign
+        },
+        "props": {
+          "width": tmpl.heroBlock.width,
+          "url": heroUrl,
+          "alt": "Banner image",
+          "linkHref": null,
+          "contentAlignment": "middle"
+        }
+      }
+    },
+
+    "block-heading": {
+      "type": "Heading",
+      "data": {
+        "props": {
+          "text": "<div>" + textToDivHtml(heading) + "</div>",
+          "level": tmpl.headingBlock.level
+        },
+        "style": {
+          "color": tmpl.headingBlock.textColor,
+          "backgroundColor": tmpl.headingBlock.backgroundColor,
+          "textAlign": tmpl.headingBlock.textAlign,
+          "padding": tmpl.headingBlock.padding,
+          "fontSize": tmpl.headingBlock.fontSize
+        }
+      }
+    },
+
+    "block-divider-1": {
+      "type": "Divider",
+      "data": {
+        "style": { "padding": tmpl.divider1.padding },
+        "props": { "color": tmpl.divider1.color }
+      }
+    },
+
+    "block-divider-2": {
+      "type": "Divider",
+      "data": {
+        "style": { "padding": tmpl.divider2.padding },
+        "props": { "color": tmpl.divider2.color }
+      }
+    }
+  };
+
+  var childrenIds = json.root.data.childrenIds;
+
+  // --- FIXED ORDER CONTENT BLOCKS, BASED ON YOUR COLUMNS ---
+
+  // 1) Study Information (Text)
+  if (row["Study Information"]) {
+    json["block-study-information"] = {
+      "type": "Text",
+      "data": {
+        "style": {
+          "color": tmpl.bodyBlock.textColor,
+          "fontSize": tmpl.bodyBlock.fontSize,
+          "padding": tmpl.bodyBlock.padding
+        },
+        "props": {
+          "text": textToDivHtml(row["Study Information"])
+        }
+      }
+    };
+    childrenIds.push("block-study-information");
+  }
+
+  // 2) CTA 1 (Button)
+  if (row["CTA 1"]) {
+    json["block-cta-1"] = {
+      "type": "Button",
+      "data": {
+        "style": {
+          "textAlign": tmpl.ctaBlock.textAlign,
+          "padding": tmpl.ctaBlock.padding
+        },
+        "props": {
+          "buttonBackgroundColor": tmpl.ctaBlock.buttonBackgroundColor,
+          "buttonStyle": tmpl.ctaBlock.buttonStyle,
+          "text":
+            '<div style="color:' + tmpl.ctaBlock.textColor + ';' +
+          'font-size:' + tmpl.ctaBlock.fontSize + 'px;' +
+          'font-weight:' + tmpl.ctaBlock.fontWeight + ';">' +
+          '<strong>' + row["CTA 1"] + '</strong>' +
+          '</div>'
+          ,
+          "url": ctaUrl
+        }
+      }
+    };
+    childrenIds.push("block-cta-1");
+  }
+
+  // 3) Eligibility (Text)
+  if (row["Eligibility"]) {
+    json["block-eligibility"] = {
+      "type": "Text",
+      "data": {
+        "style": {
+          "color": tmpl.bodyBlock.textColor,
+          "fontSize": tmpl.bodyBlock.fontSize,
+          "padding": tmpl.bodyBlock.padding
+        },
+        "props": {
+          "text": textToDivHtml(row["Eligibility"])
+        }
+      }
+    };
+    childrenIds.push("block-eligibility");
+  }
+
+  // 4) What to Expect (Text)
+  if (row["What to Expect"]) {
+    json["block-what-to-expect"] = {
+      "type": "Text",
+      "data": {
+        "style": {
+          "color": tmpl.bodyBlock.textColor,
+          "fontSize": tmpl.bodyBlock.fontSize,
+          "padding": tmpl.bodyBlock.padding
+        },
+        "props": {
+          "text": textToDivHtml(row["What to Expect"])
+        }
+      }
+    };
+    childrenIds.push("block-what-to-expect");
+  }
+
+  // 5) CTA 2 (Button)
+  if (row["CTA 2"]) {
+    json["block-cta-2"] = {
+      "type": "Button",
+      "data": {
+        "style": {
+          "textAlign": tmpl.ctaBlock.textAlign,
+          "padding": tmpl.ctaBlock.padding
+        },
+        "props": {
+          "buttonBackgroundColor": tmpl.ctaBlock.buttonBackgroundColor,
+          "buttonStyle": tmpl.ctaBlock.buttonStyle,
+          "text":
+            '<div style="color:' + tmpl.ctaBlock.textColor + ';' +
+            'font-size:' + tmpl.ctaBlock.fontSize + 'px;' +
+            'font-weight:' + tmpl.ctaBlock.fontWeight + ';">' +
+            '<strong>' + row["CTA 2"] + '</strong>' +
+            '</div>',
+          "url": ctaUrl
+        }
+      }
+    };
+    childrenIds.push("block-cta-2");
+  }
+
+  // 6) Closing (Text)
+  if (row["Closing"]) {
+    json["block-closing"] = {
+      "type": "Text",
+      "data": {
+        "style": {
+          "color": tmpl.bodyBlock.textColor,
+          "fontSize": tmpl.bodyBlock.fontSize,
+          "padding": tmpl.bodyBlock.padding
+        },
+        "props": {
+          "text": textToDivHtml(row["Closing"])
+        }
+      }
+    };
+    childrenIds.push("block-closing");
+  }
+
+// 7) Optional Resource (Text)
+if (row["Optional Resource"]) {
+  json["block-optional-resource"] = {
+    "type": "Text",
+    "data": {
+      "style": {
+        "color": tmpl.optionalResourceBlock.textColor,
+        "fontSize": tmpl.optionalResourceBlock.fontSize,
+        "fontWeight": tmpl.optionalResourceBlock.fontWeight,
+        "textAlign": tmpl.optionalResourceBlock.textAlign,
+        "padding": tmpl.optionalResourceBlock.padding
+      },
+      "props": {
+        "text": textToDivHtml(row["Optional Resource"])
+      }
+    }
+  };
+  childrenIds.push("block-optional-resource");
+}
+
+
+  // 8) End Matter (always appended, using sponsorName + language)
+  childrenIds.push("block-divider-2");
+  childrenIds.push("block-end-matter");
+
+  json["block-end-matter"] = {
+    "type": "Text",
+    "data": {
+      "style": {
+        "color": tmpl.endMatterBlock.textColor,
+        "backgroundColor": tmpl.endMatterBlock.backgroundColor,
+        "fontSize": tmpl.endMatterBlock.fontSize,
+        "fontWeight": tmpl.endMatterBlock.fontWeight,
+        "textAlign": tmpl.endMatterBlock.textAlign,
+        "padding": tmpl.endMatterBlock.padding
+      },
+      "props": {
+        "text": endMatterHtml
+      }
+    }
+  };
+
+  return json;
+}
+

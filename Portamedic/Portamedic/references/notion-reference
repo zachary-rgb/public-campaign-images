@@ -1,0 +1,1073 @@
+# Table of Contents
+
+https://www.loom.com/share/01013517856840d2859c8a932eb90270?sid=347a97e0-b1c0-4a11-8961-0a5c80136361
+
+# Introduction
+
+We use [NestJS](https://nestjs.com/) to structure our project. NestJS has an amazing documentation on how things should be created. Please take sometime to learn about [Modules, Controllers, Services](https://docs.nestjs.com/first-steps) before contributing to this project.
+
+We keep all credentials and API documentations, request, examples in our Postman Works called `Curebase - Integrations API` . There you can hit the services directly using different credentials (dev / prod).
+
+![Screenshot 2024-03-19 at 16.53.03.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/3a1ebf99-2d0f-47e1-bc95-687e00a5fa33/095a1252-4eda-4d86-90ed-ac614fefc0dd/Screenshot_2024-03-19_at_16.53.03.png)
+
+# Events
+
+This is our main module and is responsible to receive and process all the events we receive from the WebApp.
+
+### Events & Payloads
+
+- `ON_SUBMIT` - Data send when participant submits a form.
+    
+    ```jsx
+    {
+      "trigger": "ON_SUBMIT",
+      "data": {
+        "metaData": {
+          "visit": {
+            "id": 3,
+            "occurrence": 1,
+            "status": "COMPLETED"
+          },
+          "study": {
+            "id": 15,
+            "name": "Identity Testing2",
+            "identifier": "identity_testin"
+          },
+          "activity": {
+            "id": "21ab4614-ccbb-4dca-845b-4df6284ff6f0",
+            "slug": "identity_testin_identity_prescreening"
+          },
+          "participant": {
+            "id": 2,
+    				"uuid": "123",
+    				"email": "demo@curebase.com",
+    				"firstName": "Joe",
+    				"lastName": "Doe",
+    				"zipcode": "94112",
+            "status": "CREATED",
+            "subjectIdentifier": "Subject-002",
+    				"customSubjectIdentifier": "WG-002"
+          }
+        },
+        "form": {
+          "id": "3309e49a-ad57-45d6-9b8d-e0f9a6202927",
+          "slug": "identity_testin_identity_prescreening_basic_info",
+          "data": {
+            "id": 4,
+            "fields": [
+              {
+                "id": "5e27a131-2ac8-454b-bb5c-ffd184a704f3",
+                "slug": "identity_testin_identity_prescreening_basic_info_how_much_you_we",
+                "type": "NUMBER",
+                "value": "43",
+                "status": "COMPLETED",
+                "submittedAt": "2023-12-07T20:14:52.211Z"
+              }
+            ]
+          }
+        }
+      }
+    }
+    ```
+    
+- `ON_EDIT` - Data send when CaseReport submitted values are edited.
+    
+    ```jsx
+    {
+      "trigger": "ON_EDIT",
+      "data": {
+        "metaData": {
+          "visit": {
+            "id": 21,
+            "occurrence": 1,
+            "status": "COMPLETED"
+          },
+          "study": {
+            "id": 15,
+            "name": "Identity Testing2",
+            "identifier": "identity_testin"
+          },
+          "activity": {
+            "id": "21ab4614-ccbb-4dca-845b-4df6284ff6f0",
+            "slug": "identity_testin_identity_prescreening"
+          },
+          "participant": {
+            "id": 11,
+            "status": "CREATED",
+            "subjectIdentifier": "Subject-011"
+          }
+        },
+        "form": {
+          "id": "3309e49a-ad57-45d6-9b8d-e0f9a6202927",
+          "slug": "identity_testin_identity_prescreening_basic_info",
+          "data": {
+            "id": 22,
+            "fields": [
+              {
+                "id": "5e27a131-2ac8-454b-bb5c-ffd184a704f3",
+                "slug": "identity_testin_identity_prescreening_basic_info_how_much_you_we",
+                "type": "NUMBER",
+                "value": "800",
+                "status": "COMPLETED",
+                "submittedAt": "2023-12-11T14:17:05.792Z"
+              }
+            ]
+          }
+        }
+      }
+    }
+    ```
+    
+- `ON_DOCUMENT_SIGNED` - Data send when participant sign a document.
+    
+    ```jsx
+    {
+      "trigger": "ON_DOCUMENT_SIGNED",
+      "data": {
+        "metaData": {
+          "study": {
+            "id": 15,
+            "name": "Identity Testing2",
+            "identifier": "identity_testin"
+          }
+        },
+        "document": {
+          "id": "7f9661fc-6992-4531-83e2-cab0b7a83293",
+          "documentType": "INFORMED_CONSENT",
+    			"pdf": "htttps://linktopdf.com/test.pdf", 
+          "signatures": [
+            {
+              "id": 2,
+              "status": "COMPLETED",
+              "documentType": "INFORMED_CONSENT",
+              "participant": {
+                "subjectIdentifier": "Subject-002"
+              }
+            }
+          ]
+        }
+      }
+    }
+    ```
+    
+- `ON_PARTICIPANT_STATE_CHANGED` - Data send when participant change the state in the study.
+    
+    ```jsx
+    {
+      "trigger": "ON_PARTICIPANT_STATE_CHANGED",
+      "data": {
+        "metaData": {
+          "participant": {
+            "id": 2,
+            "subjectIdentifier": "Subject-002"
+          },
+          "study": {
+            "id": 15,
+            "name": "Identity Testing2",
+            "identifier": "identity_testin"
+          }
+        },
+        "state": {
+          "previousState": "CREATED",
+          "currentState": "COMPLETED"
+        }
+      }
+    }
+    ```
+    
+- `ON_SCHEDULE` - Data send when staff or participant schedule an appointment.
+    
+    ```jsx
+    {
+      "trigger": "ON_SCHEDULE",
+      "data": {
+        "metaData": {
+          "participant": {
+            "id": 2,
+            "subjectIdentifier": "Subject-002"
+          },
+          "study": {
+            "id": 15,
+            "name": "Identity Testing2",
+            "identifier": "identity_testin"
+          }
+        },
+        "visitBooking": {
+          "id": 1,
+          "start": "1701980556020",
+          "end": "1701981156020",
+          "pushedToExternal": false,
+          "hasConfirmed": false,
+          "needsRescheduling": false,
+          "method": "IN_PERSON",
+          "type": "STUDY_VISIT",
+          "isCanceled": false,
+          "acuityAppointmentId": null,
+          "axleHealthId": null,
+          "meetingUUID": null,
+          "callMedia": null,
+          "axleHealthStatus": "not_started",
+          "spectatorId": null,
+          "isRescheduling": false,
+          "createdAt": "2023-12-07T20:22:36.083Z",
+          "updatedAt": "2023-12-07T20:22:36.083Z",
+          "schedulingConfigurationId": "4c086c39-bd2c-448b-a847-3370f77403aa",
+          "trialOptionId": 2,
+          "visitAvailabilityId": null,
+    			"integrations": {
+            "portamedic": {
+              "examinerID": "NSC00000000000000000000243546017"
+            }
+    			}
+        },
+        "schedulingConfiguration": {
+          "id": "4c086c39-bd2c-448b-a847-3370f77403aa",
+          "name": "Scheduled Event 1",
+          "summary": "Scheduled Event 1",
+          "instructions": {
+            "site": "Scheduled Event 1",
+            "patient": "Scheduled Event 1"
+          },
+          "default": {
+            "methods": {
+              "atHome": true,
+              "virtual": true,
+              "inPersonClinic": true
+            },
+            "activities": [
+              "identity_testin_Unscheduled Activity 1"
+            ],
+            "telemedInfo": {
+              "telemedCallDesc": "description",
+              "telemedMemberDesc": "description",
+              "telemedPrepareDesc": "description",
+              "telemedMeetingCanBeJoinedEarly": true
+            },
+            "isUnscheduled": true,
+            "notifications": {},
+            "allowSpectator": false,
+            "schedulingSystem": "CurebaseScheduling",
+            "bookerSuccessText": {
+              "participantCancel": "Scheduled Event 1",
+              "participantSuccess": "Scheduled Event 1",
+              "nonParticipantCancel": "Scheduled Event 1",
+              "nonParticipantSuccess": "Scheduled Event 1",
+              "participantCancelButton": "Scheduled Event 1",
+              "participantSuccessButton": "Scheduled Event 1",
+              "nonParticipantCancelButton": "Scheduled Event 1",
+              "nonParticipantSuccessButton": "Scheduled Event 1"
+            },
+            "appointmentBookingInfo": {
+              "appointmentBookingDesc": "description",
+              "appointmentBookingHeader": "header",
+              "virtualVisitBookingItemDescription": "description virtual site"
+            },
+            "automatedNotifications": "yes",
+            "disableParticipantScheduling": false
+          },
+          "reminderSchedule": [],
+          "createdAt": "2023-12-07T19:59:33.588Z",
+          "updatedAt": "2023-12-07T19:59:33.588Z",
+          "locales": {
+            "en-us": {
+              "name": "Scheduled Event 1",
+              "default": {
+                "methods": {
+                  "atHome": true,
+                  "virtual": true,
+                  "inPersonClinic": true
+                },
+                "activities": [
+                  "identity_testin_Unscheduled Activity 1"
+                ],
+                "telemedInfo": {
+                  "telemedCallDesc": "description",
+                  "telemedMemberDesc": "description",
+                  "telemedPrepareDesc": "description",
+                  "telemedMeetingCanBeJoinedEarly": true
+                },
+                "isUnscheduled": true,
+                "notifications": {},
+                "allowSpectator": false,
+                "schedulingSystem": "CurebaseScheduling",
+                "bookerSuccessText": {
+                  "participantCancel": "Scheduled Event 1",
+                  "participantSuccess": "Scheduled Event 1",
+                  "nonParticipantCancel": "Scheduled Event 1",
+                  "nonParticipantSuccess": "Scheduled Event 1",
+                  "participantCancelButton": "Scheduled Event 1",
+                  "participantSuccessButton": "Scheduled Event 1",
+                  "nonParticipantCancelButton": "Scheduled Event 1",
+                  "nonParticipantSuccessButton": "Scheduled Event 1",
+                  "participantCancelModalNoOption": "Scheduled Event 1",
+                  "participantCancelModalYesOption": "Scheduled Event 1",
+                  "participantCancelModalInstructions": "Scheduled Event 1",
+                  "participantCancelModalConfirmButton": "Scheduled Event 1"
+                },
+                "appointmentBookingInfo": {
+                  "appointmentBookingDesc": "description",
+                  "appointmentBookingHeader": "header",
+                  "virtualVisitBookingItemDescription": "description virtual site"
+                },
+                "automatedNotifications": "yes",
+                "disableParticipantScheduling": false
+              },
+              "summary": "Scheduled Event 1",
+              "instructions": {
+                "site": "Scheduled Event 1",
+                "patient": "Scheduled Event 1"
+              },
+              "reminderSchedule": []
+            }
+          },
+          "isSiteSelectionOnly": null
+        }
+      }
+    }
+    ```
+    
+- `ON_SCHEDULE_CANCEL` - Data send when staff or participant cancel scheduled appointment.
+    
+    ```jsx
+    {
+      "trigger": "ON_SCHEDULE_CANCEL",
+      "data": {
+        "metaData": {
+          "participant": {
+            "id": 11,
+            "subjectIdentifier": "Subject-011"
+          },
+          "study": {
+            "id": 15,
+            "name": "Identity Testing2",
+            "identifier": "identity_testin"
+          }
+        },
+        "visitBooking": {
+          "id": 7,
+          "start": "1702318260000",
+          "end": "1702318860000",
+          "pushedToExternal": false,
+          "hasConfirmed": false,
+          "needsRescheduling": false,
+          "method": "IN_PERSON",
+          "type": "STUDY_VISIT",
+          "isCanceled": true,
+          "acuityAppointmentId": null,
+          "axleHealthId": null,
+          "meetingUUID": null,
+          "callMedia": null,
+          "axleHealthStatus": "canceled",
+          "spectatorId": null,
+          "isRescheduling": false,
+          "createdAt": "2023-12-11T13:36:38.400Z",
+          "updatedAt": "2023-12-11T13:37:56.035Z",
+          "schedulingConfigurationId": "4c086c39-bd2c-448b-a847-3370f77403aa",
+          "trialOptionId": 11,
+          "visitAvailabilityId": 24,
+    			"integrations": {
+            "portamedic": {
+              "examinerID": "NSC00000000000000000000243546017"
+            }
+    			}
+        },
+        "schedulingConfiguration": {
+          "id": "4c086c39-bd2c-448b-a847-3370f77403aa",
+          "name": "Scheduled Event Curebase",
+          "summary": "Scheduled Event Curebase",
+          "instructions": {
+            "site": "Scheduled Event 1",
+            "patient": "Scheduled Event 1"
+          },
+          "default": {
+            "methods": {
+              "atHome": true,
+              "virtual": true,
+              "inPersonClinic": true
+            },
+            "activities": [
+              "identity_testin_Unscheduled Activity 1"
+            ],
+            "telemedInfo": {
+              "telemedCallDesc": "description",
+              "telemedMemberDesc": "description",
+              "telemedPrepareDesc": "description",
+              "telemedMeetingCanBeJoinedEarly": true
+            },
+            "isUnscheduled": true,
+            "notifications": {},
+            "allowSpectator": false,
+            "schedulingSystem": "CurebaseScheduling",
+            "bookerSuccessText": {
+              "participantCancel": "Scheduled Event 1",
+              "participantSuccess": "Scheduled Event 1",
+              "nonParticipantCancel": "Scheduled Event 1",
+              "nonParticipantSuccess": "Scheduled Event 1",
+              "participantCancelButton": "Scheduled Event 1",
+              "participantSuccessButton": "Scheduled Event 1",
+              "nonParticipantCancelButton": "Scheduled Event 1",
+              "nonParticipantSuccessButton": "Scheduled Event 1"
+            },
+            "appointmentBookingInfo": {
+              "appointmentBookingDesc": "description",
+              "appointmentBookingHeader": "header",
+              "virtualVisitBookingItemDescription": "description virtual site"
+            },
+            "automatedNotifications": "yes",
+            "disableParticipantScheduling": false
+          },
+          "reminderSchedule": [],
+          "createdAt": "2023-12-07T19:59:33.588Z",
+          "updatedAt": "2023-12-11T13:02:13.261Z",
+          "locales": {
+            "en-us": {
+              "name": "Scheduled Event Curebase",
+              "default": {
+                "methods": {
+                  "atHome": true,
+                  "virtual": true,
+                  "inPersonClinic": true
+                },
+                "activities": [
+                  "identity_testin_Unscheduled Activity 1"
+                ],
+                "telemedInfo": {
+                  "telemedCallDesc": "description",
+                  "telemedMemberDesc": "description",
+                  "telemedPrepareDesc": "description",
+                  "telemedMeetingCanBeJoinedEarly": true
+                },
+                "isUnscheduled": true,
+                "notifications": {},
+                "allowSpectator": false,
+                "schedulingSystem": "CurebaseScheduling",
+                "bookerSuccessText": {
+                  "participantCancel": "Scheduled Event 1",
+                  "participantSuccess": "Scheduled Event 1",
+                  "nonParticipantCancel": "Scheduled Event 1",
+                  "nonParticipantSuccess": "Scheduled Event 1",
+                  "participantCancelButton": "Scheduled Event 1",
+                  "participantSuccessButton": "Scheduled Event 1",
+                  "nonParticipantCancelButton": "Scheduled Event 1",
+                  "nonParticipantSuccessButton": "Scheduled Event 1",
+                  "participantCancelModalNoOption": "Scheduled Event 1",
+                  "participantCancelModalYesOption": "Scheduled Event 1",
+                  "participantCancelModalInstructions": "Scheduled Event 1",
+                  "participantCancelModalConfirmButton": "Scheduled Event 1"
+                },
+                "appointmentBookingInfo": {
+                  "appointmentBookingDesc": "description",
+                  "appointmentBookingHeader": "header",
+                  "virtualVisitBookingItemDescription": "description virtual site"
+                },
+                "automatedNotifications": "yes",
+                "disableParticipantScheduling": false
+              },
+              "summary": "Scheduled Event Curebase",
+              "instructions": {
+                "site": "Scheduled Event 1",
+                "patient": "Scheduled Event 1"
+              },
+              "reminderSchedule": [],
+              "isSiteSelectionOnly": false
+            }
+          },
+          "isSiteSelectionOnly": false
+        }
+      }
+    }
+    ```
+    
+
+https://www.loom.com/share/2b41c4ffbcae463aae984e32200db1d9?sid=995f321c-827b-4401-b744-571e3b457235
+
+Note: Be sure you have those variables created in your webapp `server/.env` file:
+
+```jsx
+INTEGRATIONS_API_URL=http://localhost:6000
+INTEGRATIONS_API_KEY=hKi-tPMOVd2a0nBsMTxmqkzO9XYv_3t8UjLye3J1l04
+```
+
+### **Structure**
+
+- `api/src/modules/event/event.controller.ts` → Endpoint that receives and process all events from all participants in the configured studies.
+- `api/src/modules/event/event.service.ts` → Service responsible to aggregate the necessary data from each participant so that we can use it to trigger our integrations.
+    
+    # Portamedic
+    
+
+### **Epics**
+
+- https://curebase.atlassian.net/browse/APP-6268
+- https://curebase.atlassian.net/browse/APP-6843
+
+```mermaid
+sequenceDiagram
+	WebApp ->> Curebase API: POST /data/save (prescreening)
+	Curebase API ->> Integrations API: ON_SUBMIT
+	Integrations API ->> Integrations API: SAVE { participant: { uuid, firstName, lastName, zipcode, phoneNumber }, form: { address }  }
+	WebApp ->> Curebase API: POST /api/scheduling/availability
+	Curebase API ->> Integrations API: GET /portamedic/availabilities
+	Integrations API ->> Portamedic SOAP API: POST CheckAvailabilityWithRequirements
+	Integrations API -->> Curebase API: Availability [{ ..., examinerID }]
+	Curebase API -->> WebApp: Availability [{ ..., examinerID }]
+	WebApp ->> Curebase API: POST /api/booking/schedulevisit ({ examinerID })
+	Curebase API ->> Integrations API: POST /event (ON_SCHEDULE)
+	Integrations API ->> Integrations API: SAVE { integrations: { portamedic: { examinerId } }  }
+	Integrations API ->> Portamedic SOAP API: POST CheckAvailabilityWithRequirements (get refreshed cookie/session)
+	Integrations API ->> Portamedic SOAP API: POST /connect/token (get token)
+	Integrations API ->> Portamedic SOAP API: POST MakeReservation
+	Integrations API ->> Portamedic SOAP API: POST NewCaseSubmit
+```
+
+### **Structure**
+
+- `api/src/modules/portamedic/portamedic.controller.ts`  → Endpoint to fetch Portamedic availability. It's called by the WebApp when we do `GET /availability`  request for the Portamedic ScheduleSystem.
+- `api/src/modules/portamedic/portamedic.service.ts`  → Service responsible to check the business logic and map data that needs to be send to Portamedic.
+- `api/src/modules/portamedic/portamedic-api.service.ts`  → Portamedic API implementation.
+- `api/src/common/configs/portamedic.config.json` → default study configuration for Portamedic integration.
+
+### **Studies**
+
+- PROCEED-CRC
+- PROACT
+
+### **Actions**
+
+- fetch availability
+- make reservation
+- send order
+
+## Testing
+
+https://www.loom.com/share/0db21ced03f24b5fbb5b610fb1aa3b69?sid=ac776908-2cff-4d84-9d9d-694fa2cbaab3
+
+# Viedoc
+
+### **Epics**
+
+- https://curebase.atlassian.net/browse/APP-5175
+
+```mermaid
+sequenceDiagram
+	Curebase API ->> Integrations API: POST /event (ON_SUBMIT)
+  Curebase API ->> Integrations API: POST /event (ON_DOCUMENT_SIGNED)
+	Curebase API ->> Integrations API: POST /event (ON_PARTICIPANT_STATE_CHANGED)
+	Integrations API ->> Viedoc SOAP API: POST GetToken
+	Integrations API ->> Viedoc SOAP API: POST SubmitData (subjectIdentifier)
+  Curebase API ->> Integrations API: POST /event (ON_EDIT)
+  Integrations API ->> Viedoc SOAP API: POST SubmitData (subjectIdentifier)
+```
+
+### **Structure**
+
+- `api/src/modules/viedoc/viedoc.service.ts`  → Service responsible to check the business logic and map data that needs to be send to Viedoc.
+- `api/src/modules/viedoc/viedoc-api.service.ts`  → Viedoc API implementation.
+- `api/src/common/configs/viedoc.config.json` → default study configuration for Viedoc integration.
+
+### **Studies**
+
+- PROCEED-CRC
+
+### **Actions**
+
+- upsert participant data
+
+## Testing
+
+https://www.loom.com/share/e1fab709c4334b799067f21ea7efbbf0?sid=107d2ab0-325a-4ed0-8860-d9c868c9ea92
+
+# Datavant
+
+### **Epics**
+
+- https://curebase.atlassian.net/browse/APP-6649
+
+```mermaid
+sequenceDiagram
+	Curebase API ->> Integrations API: POST /event (ON_SUBMIT)
+	Curebase API ->> Integrations API: POST /event (ON_DOCUMENT_SIGNED)
+	Integrations API ->> Datavant API: POST /patient
+	Integrations API ->> Integrations API: schedule request to be processed 14 days after
+	Integrations API ->> Datavant API: POST /record
+```
+
+### **Structure**
+
+- `api/src/modules/datavant/datavant.service.ts`  → Service responsible to check the business logic and map data that needs to be send to Viedoc.
+- `api/src/modules/datavant/datavant-api.service.ts`  → Viedoc API implementation.
+- `api/src/modules/datavant/datavant-trigger-validator.service.ts`  → Service responsible to apply different trigger logic based on different studies
+- `api/src/common/configs/datavant.config.json` → default study configuration for Datavant integration.
+
+### Tokenization
+
+https://www.loom.com/share/697f3cb56ef74d4da1143bfcae331482?sid=62e9e9f1-b934-4d99-a027-e314bf239cb0
+
+For tokenization work locally you will have to do to `packages/server/modules/integrations/datavant/bin/`  and run this command `./Datavant_Mac server --port 5040`  and wait for it to return this message.
+
+After that you should be good to start testing.
+
+![Screenshot 2024-03-22 at 09.56.39.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/3a1ebf99-2d0f-47e1-bc95-687e00a5fa33/a64da260-4cca-471e-ae0d-363c1e217f88/Screenshot_2024-03-22_at_09.56.39.png)
+
+The Tokenization should be triggered when:
+
+- The Study has the configuration enabled
+- The participant is allowed to generate the tokens
+    - That's done though a question field in a CRF
+
+Because of the last point the `Datafield` slug and the expected value for that Datafield in the CRF has to be defined in the Tokenization settings for the study configuration.
+Here's and example 
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/3a1ebf99-2d0f-47e1-bc95-687e00a5fa33/fc944782-6b4b-4b71-b1f2-b0fa3191513d/Untitled.png)
+
+### **Studies**
+
+- PROCEED-CRC
+    - create participant
+    - record retrieval
+- PROACT
+    - create participant
+    - tokenization
+    - record retrieval
+
+### **Actions**
+
+- create participant
+- request record retrieval (cronHandler)
+- send tokenization data to SFTP server
+
+## Testing
+
+https://www.loom.com/share/e7b7d70053f744a5876afbcdf741bd46?sid=7e432692-c067-45f7-b0c3-e511f1f75b93
+
+# JPM
+
+### Certificates Provisioning for JPM Integration
+
+In order to integrate with JPMorgan's API for payments, we require **two certificates** for each environment (UAT and Production):
+
+1. **Digital Signature Certificate** (for signing payloads)
+2. **Transport Certificate** (for mutual TLS authentication)
+
+Each certificate needs to be **self-managed** and provisioned through a trusted Certificate Authority (CA), such as **GlobalSign**.
+
+These certificates need to be different within and across each environment - you needs 2 for UAT and 2 for prod. They can all be GlobalSign DV certs, currently priced at $249 each, for 12 months. 
+
+### Steps to Provision the Certificates:
+
+1. **Create the Certificate Signing Request (CSR)** using OpenSSL:
+    - This will generate both the **CSR** file (which you submit to the CA) and the corresponding **private key**.
+    
+    Use the following OpenSSL command to create a CSR and private key:
+    
+    ```bash
+    openssl req -out CSR.csr -new -newkey rsa:2048 -keyout privatekey.key
+    ```
+    
+    - **privateKey.pem**: This is the private key file, which you will need for signing the payload.
+    - **csr.pem**: This is the CSR file to be submitted to the CA for signing.
+    
+    ![image.png](attachment:aa260341-8baa-4878-a511-ad1c38166adb:image.png)
+    
+    PEM pass phrase: curebase
+    
+
+1. **Submit the CSR** to the CA (GlobalSign in this case) and request the appropriate certificates for both **digital signature** and **transport**.
+    1. Transport certificate: (”regular” Domain SSL cert) - from GlobalSign, see below. We use GlobalSign because JPM trusts their CA cert. Easier that way. 
+    
+    ![image.png](attachment:c6d0ce46-3150-434b-8c25-5fc0a5128f20:image.png)
+    
+    Validation: I picked domain validation - follow the instructions to add a validation entry to our DNS settings.
+    
+    ![image.png](attachment:3805c6dc-5e10-4fa9-977f-396d6253edc4:image.png)
+    
+    ![image.png](attachment:de61fd3d-8252-49cc-933b-98dbcb072c7d:image.png)
+    
+    Paste the CSR you generated here
+    
+    ![image.png](attachment:2d80bfd2-d242-4229-9607-a447914c258c:image.png)
+    
+    Once you complete the process and pay, and validate (I chose the DNS Verification method)
+    
+    You will receive the new cert from GlobalSign via email.
+    
+    **Signing certificate:** Also from GlobalSign. Same steps, same cert type. Just use a different private key. In other words follow the same process again starting with key generation, pay $249 again. Yay. 
+    
+2. **Submit the certificates** to JPMorgan via the Developer Portal at:
+[JPMorgan Developer Portal](https://developer.jpmorgan.com/).
+    
+    Go to Dashboard/Curebase/Certificate Upload
+    
+    Create new .crt certificate files, copy and pasted from the email text you receive from globalsign once you have paid. 
+    
+    Upload crt files () to the stage”Upload Mutual TLS/SSL Certificate” second from the bottom in the left navbar.
+    
+    After upload it’ll look like this: 
+    
+    ![image.png](attachment:485ff429-9064-43ee-9d85-1ee990cc5cdc:image.png)
+    
+
+1. **Wait for approval** from JPMorgan, confirming that the certificates have been installed on their end.
+
+### Using the Digital Signature Certificate
+
+Once you have received the **Digital Signature Certificate**, you will use the **private key** associated with this certificate to sign your API payloads. Here is an example of how to import the private key and sign the payload using `jose`:
+
+```tsx
+const privateKeyPromise: Promise<KeyLike> = (async () => {
+  try {
+    return await importPKCS8(jpmDsUatKeyDecrypted, 'RS256');
+  } catch (error) {
+    console.log('Error importing private key:', error);
+    throw new Error(error.message);
+  }
+})();
+
+const getPrivateKey = async (): Promise<KeyLike> => {
+  return privateKeyPromise;
+};
+
+// Helper function to sign payloads
+const signPayload = async (payload: JWTPayload): Promise<string> => {
+  try {
+    const key = await getPrivateKey();
+
+    const protectedHeader = { alg: 'RS256' };
+
+    const jws = await new SignJWT(payload)
+      .setProtectedHeader(protectedHeader)
+      .sign(key);
+
+    return jws;
+  } catch (error) {
+    console.error('Error signing payload:', error);
+    throw new Error(`Failed to sign the payload: ${error.message}`);
+  }
+};
+```
+
+### Using the Transport Certificate
+
+In addition to signing the payload, you must provide your **transport certificate** and its **private key** during the HTTPS connection. Here’s how to configure the HTTPS agent:
+
+```tsx
+const getHttpsAgent = (): https.Agent => {
+  return new https.Agent({
+    cert: jpmTransportUatCert,  // The transport certificate
+    key: jpmTransportUatKeyRsa,  // The private key for the transport certificate
+    rejectUnauthorized: true,
+  });
+};
+```
+
+### API Request Headers
+
+- The API request headers must include the provided **`X-Client-Id`**.
+- The content type must be set to **`'Content-Type': 'text/xml'`**.
+
+### Response Handling
+
+- Accept any **2xx response** from JPMorgan's API, as their documentation may not be consistent with actual responses.
+
+### Further Details → IMPORTANT
+
+In order to properly authenticate with JPMorgan’s API using mutual TLS, it is **not sufficient to only send the certificate issued by the CA**. You must also include the **intermediate** and **root certificates** in the correct order.
+
+### Steps to Prepare the Transport Certificate for Mutual TLS
+
+1. **Concatenate the Certificates**:
+    - After receiving the **issued transport certificate** from the CA (GlobalSign), you need to **concatenate**:
+        - The **issued certificate** (the one issued specifically for your app),
+        - The **intermediate certificate(s)**, and
+        - The **root certificate**.
+2. **Order of Concatenation**:
+    - The order of the certificates in the concatenated file should be:
+        1. **Your Transport Certificate** (issued for your app).
+        2. **Intermediate Certificate** (provided by the CA).
+        3. **Root Certificate** (also provided by the CA or available from the CA's website).
+3. **Verify the Concatenated Certificate**:
+- After concatenating the certificates, you can use the following command to verify that they are properly concatenated:
+
+```bash
+openssl verify -CAfile fullchain.pem your-transport-cert.pem
+```
+
+### API documentation
+
+For more information on expected payloads and field requirements, refer to this [Google Sheets document](https://docs.google.com/spreadsheets/d/1fb_xcs5qznPw7YPyPdiZggGJzjO6Xk-G/edit?gid=1681716849#gid=1681716849), which includes examples of the expected payloads, optional fields, and required fields.
+
+This is the link to the official JPM documentation: https://developer.jpmorgan.com/products/tsapi-global-prepaid-card/specification
+
+### API endpoints
+
+**1. /fundings**
+
+**POST - Fund an Account**
+
+- **Summary**: This endpoint is used to credit or debit funds to a cardholder’s account. **Digital Signature Required.**
+
+**Attributes (Request Body)**:
+
+- **accountNumber** (string, required): Unique value to identify the cardholder (max length: 12).
+- **creditDebitFlag** (string, required): Whether the transaction is a credit (`C`) or debit (`D`).
+- **traceId** (string, required): Unique trace ID for the transaction (max length: 22).
+- **funds** (object, required): Object containing:
+    - **amount** (string, required): Amount to be debited or credited (2 decimal format, e.g., `"2.36"`).
+    - **currencyCode** (string, required): Currency code, e.g., `"USD"`.
+- **addendumInfo** (string, optional): Additional information or memo for the transaction (max length: 50).
+- **locationCode** (string, optional): Alphanumeric code to identify the transaction location.
+
+**Example response:**
+
+```json
+{
+    "fundingId": null,
+    "accountNumber": "501011595987",
+    "creditDebitFlag": "C",
+    "addendumInfo": "credit",
+    "funds": {
+        "amount": "2.36",
+        "currencyCode": "USD"
+    }
+}
+```
+
+---
+
+**2. /accounts**
+
+**POST - Create a Prepaid Card Account**
+
+- **Summary**: This endpoint creates a new prepaid card account for a cardholder. **Digital Signature Required.**
+
+**Attributes (Request Body)**:
+
+- **cardHolderID** (string, required): Unique client-assigned ID (e.g., employee ID).
+- **firstName** (string, required): Cardholder’s first name.
+- **lastName** (string, required): Cardholder’s last name.
+- **birthDate** (string, required): Cardholder’s birthdate (YYYY-MM-DD).
+- **initial** (string, optional): Cardholder’s initials.
+- **email** (string, required): Cardholder’s email address.
+- **residentialAddress** (object, required): Physical address containing:
+    - **address1** (string, required): Address line 1.
+    - **city** (string, required): City of residence.
+    - **state** (string, required): State of residence.
+    - **country** (string, required): Country of residence.
+    - **postalCode** (string, required): Postal code.
+- **dayPhone** (string, required): Cardholder’s daytime phone number.
+- **mobilePhone** (string, required): Cardholder’s mobile phone number.
+
+**Example response:**
+
+```json
+{
+    "cardHolderID": "000002",
+    "accountNumber": "501011595912", // only field specified in docs
+    "firstName": "John",
+    "middleName": null,
+    "lastName": "Doe"
+}
+```
+
+---
+
+**3. /accounts/details**
+
+**POST - Retrieve Account Details**
+
+- **Summary**: This endpoint retrieves the details of a specific prepaid card account based on the identifier provided.
+
+**Attributes (Request Body)**:
+
+- **identifier** (string, required): The account number or ID based on the identifier type.
+- **identifierType** (string, required): Specifies the type of identifier:
+    - `A`: Account Number
+    - `G`: Government ID Number
+    - `C`: Cardholder ID
+
+**Example response:**
+
+```json
+{
+    "accountNumber": "501011595888",
+    "cardHolderID": "000001",
+    "firstName": "JOHN",
+    "middleName": "",
+    "lastName": "DOE",
+    "birthDate": "1983-01-01",
+    "citizenshipCountry": null,
+    "passPhrase": "",
+    "reminderPassPhrase": "",
+    "languagePreference": null,
+    "email": "user@example.com",
+    "statementFlag": null,
+    "residentialAddress": {
+        "address1": "123 BANK DRIVE",
+        "address2": "",
+        "address3": "",
+        "city": "NEW YORK",
+        "state": "NY",
+        "country": "US",
+        "postalCode": "10000"
+    },
+    "mailingAddress": {
+        "address1": "123 BANK DRIVE",
+        "address2": "",
+        "address3": "",
+        "city": "NEW YORK",
+        "state": "NY",
+        "country": "US",
+        "postalCode": "10000"
+    },
+    "dayPhone": {
+        "contactNumber": "5556665678",
+        "countryCode": "840"
+    },
+    "mobilePhone": {
+        "contactNumber": "5556665678",
+        "countryCode": "840"
+    },
+    "customFields": {
+        "customField1": "",
+        "customField2": "",
+        "customField3": "",
+        "customField4": "",
+        "customField5": ""
+    },
+    "amount": "0",
+    "currencyCode": "USD",
+    "reasonForUpdate": null
+}
+```
+
+---
+
+**4. /accounts/update**
+
+**POST - Update a Prepaid Card Account**
+
+- **Summary**: This endpoint updates details of an existing prepaid card account. **Digital Signature Required.**
+
+**Attributes (Request Body)**:
+
+- **accountNumber** (string, required): Account number to be updated.
+- **cardHolderID** (string, optional): Unique client-assigned ID (optional).
+- **firstName** (string, required): Updated first name of the cardholder.
+- **lastName** (string, required): Updated last name of the cardholder.
+- **birthDate** (string, required): Updated birthdate (YYYY-MM-DD).
+- **initial** (string, optional): Updated initials of the cardholder.
+- **email** (string, required): Updated email address.
+- **residentialAddress** (object, required): Updated address information:
+    - **address1** (string, required): Address line 1.
+    - **city** (string, required): City of residence.
+    - **state** (string, required): State of residence.
+    - **country** (string, required): Country of residence.
+    - **postalCode** (string, required): Postal code.
+- **dayPhone** (string, required): Updated daytime phone number.
+- **mobilePhone** (string, required): Updated mobile phone number.
+
+**Example response:**
+
+```json
+{
+    "accountNumber": "501011595912", // only field specified in docs
+    "firstName": "John",
+    "middleName": null,
+    "lastName": "Doe",
+    "birthDate": "1983-01-01",
+    "citizenshipCountry": null,
+    "passPhrase": null,
+    "reminderPassPhrase": null,
+    "languagePreference": null,
+    "email": "user@example.com",
+    "statementFlag": null,
+    "residentialAddress": {
+        "address1": "123 Bank Drive",
+        "address2": null,
+        "address3": null,
+        "city": "New York",
+        "state": "NY",
+        "country": "US",
+        "postalCode": "10000"
+    },
+    "mailingAddress": null,
+    "dayPhone": {
+        "contactNumber": "5556665678",
+        "countryCode": "840"
+    },
+    "mobilePhone": {
+        "contactNumber": "5556665678",
+        "countryCode": "840"
+    },
+    "customFields": null,
+    "reasonForUpdate": null,
+    "cardHolderID": "000002",
+    "requiredConfigKeys": [
+        "Date of Birth",
+        "Residential Address",
+        "Mobile Phone Number"
+    ]
+}
+```
+
+---
+
+**5. /cards**
+
+**POST - Create or Replace a Prepaid Card**
+
+- **Summary**: This endpoint is used to create a new card for an account holder or replace an existing card. **Digital Signature Required.**
+
+**Attributes (Request Body)**:
+
+- **accountNumber** (string, required): The cardholder's account number.
+- **cardHolderID** (string, required): Client-assigned unique identification number.
+- **addReplaceFlag** (string, required): Specifies whether to add a new card (`A`) or replace an existing one (`R`).
+- **cardTypeFlag** (string, required): Defines whether the card is primary (`P`) or secondary (`S`).
+- **firstName** (string, required): First name of the cardholder.
+- **lastName** (string, required): Last name of the cardholder.
+- **shippingAddrType** (string, required): Specifies whether to use mailing (`M`) or residential (`R`) address for shipping.
+- **shippingAddress** (object, required): The address to which the card should be shipped.
+- **expediteFlag** (string, optional): Whether the card should be expedited (`Y` or `N`).
+
+**Example response:**
+
+```json
+{
+    "accountNumber": "501011595987",
+    "cardHolderID": "",
+    "message": "SUCCESS",
+    "link": "NA",
+    "serialNumber": null
+}
+```
+
+**Credentials:**
+
+- JPM dev portal:
+    
+    https://developer.jpmorgan.com/
+    email: [alvaro.paz@curebase.com](mailto:alvaro.paz@curebase.com)
+    password: jpm2024A
+    
+    NewPassword: jpm2025CureB ~~jpm2025Cure~~
+    
+    documentation of the API we are consuming: https://developer.jpmorgan.com/products/tsapi-global-prepaid-card
+    
+- Global Sign:
+    
+    https://gcc.globalsign.com/au/signon/gacp/usernamePasswordLogin.do
+    username: PAR280960_curebaseGS
+    
+    password:`DBV1uwn_aec7ner2bfn`
+    
+- Password for all keys:
+    
+    curebase
+    
+
+![image.png](attachment:6b9c1c41-07cf-438e-824e-905f32ab380e:image.png)
+
+![image.png](attachment:5d2c0d4f-05bd-4e8b-b7ab-2b3fd45f8674:image.png)
+
+![image.png](attachment:6f620769-78df-44fd-bf66-b823507c3a89:image.png)

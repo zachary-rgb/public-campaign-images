@@ -1,0 +1,18 @@
+SOURCE: Technical connectivity - image16.png
+============================================================
+
+Sample Return XML - OfficeCoveringZipCode
+
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeInfo xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OfficeNumber>01100</OfficeNumber>
+  <DisplayName>New York City, New York</DisplayName>
+  <Street>42-40 Bell Blvd.</Street>
+  <AptNumber>305</AptNumber>
+  <City>Bayside</City>
+  <State>NY</State>
+  <ZipCode>11361</ZipCode>
+  <Phone>718-225-9300</Phone>
+  <Fax>718-423-9505</Fax>
+  <EmailAlias>NewYorkCity.NY@APPSdom.com</EmailAlias>
+</OfficeInfo>

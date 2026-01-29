@@ -1,0 +1,4 @@
+# Python dependencies for Campaign Content Extractor
+python-docx>=0.8.11
+pyperclip>=1.8.2
+

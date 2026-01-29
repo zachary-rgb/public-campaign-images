@@ -1,0 +1,1557 @@
+PORTAMEDIC API DOCUMENTATION - COMPLETE COMPILATION
+======================================================================
+Generated from old docs folder
+======================================================================
+
+
+======================================================================
+SOURCE: DOCX: 1.docx
+======================================================================
+
+
+SOAP 1.1
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/CheckAvailability"
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<CheckAvailability xmlns="http://tempuri.org/">
+<strUserName>string</strUserName>
+<strUserPassword>string</strUserPassword>
+<strAccountNumber>string</strAccountNumber>
+<intAge>short</intage>
+<intAmount>int</intAmount>
+<strGender>string</strGender>
+<strUniqueID>string</strUnique ID>
+<strZipCode>string</strZipCode>
+<strExceptionProduct>string</strExceptionProduct>
+<strApplicationState>string</strApplicationState>
+<datReservation>dateTime</datReservation>
+</CheckAvailability>
+</soap:Body>
+</soap:Envelope>
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<CheckAvailabilityResponse xmlns="http://tempuri.org/">
+<CheckAvailabilityResult>
+<ArrayOfString>
+<string>string</string>
+<string>string</string>
+</ArrayOfString>
+<ArrayOfString>
+<string>string</string>
+<string>string</string>
+</ArrayOfString>
+</CheckAvailabilityResult>
+</CheckAvailabilityResponse>
+</soap:Body>
+</soap:Envelope>
+
+
+======================================================================
+SOURCE: DOCX: 5.docx
+======================================================================
+
+
+Covering Office Zip Code
+The carrier will have the ability to pass APPS the zip code of the applicant. In return, APPS will provide the local field office contact information that will cover the zip codes exam.
+SOAP 1.1
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/OfficeCoveringZipCode"
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<OfficeCoveringZipCode xmlns="http://tempuri.org/">
+<strUserName>string</strUserName>
+<strUserPassword>string</strUserPassword>
+<strZipCode>string</strZipCode>
+</OfficeCoveringZipCode>
+</soap:Body>
+</soap:Envelope>
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<OfficeCoveringZipCodeResponse xmlns="http://tempuri.org/">
+<OfficeCoveringZipCodeResult>
+<OfficeNumber>string</OfficeNumber>
+<DisplayName>string</DisplayName>
+<Street>string</Street>
+<AptNumber>string</AptNumber>
+<City>string</City>
+<State>string</State>
+<ZipCode>string</ZipCode>
+<Phone>string</Phone>
+<Fax>string</Fax>
+<EmailAlias>string</EmailAlias>
+</OfficeCoveringZipCodeResult>
+</OfficeCoveringZipCodeResponse>
+</soap:Body> </soap:Envelope>
+
+
+======================================================================
+SOURCE: DOCX: 3.docx
+======================================================================
+
+
+?
+Make Reservation
+The carrier will pass the same parameters they used to check availability; however, they will also include
+the selected Examiner ID and available time selected as illustrated
+below.
+SOAP 1.1
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/MakeReservation"
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<MakeReservation xmlns="http://tempuri.org/">
+<strUserName>string</strUserName> <strUserPassword>string</strUserPassword>
+<strAccountNumber>string</strAccountNumber>
+<intAge>short</intage>
+<intAmount>int</intAmount>
+<strGender>string</strGender>
+<strUniqueID>string</strUniqueID>
+<strZipCode>string</strZipCode>
+<strExceptionProduct>string</strExceptionProduct>
+<strApplicationState>string</strApplicationState>
+<datReservation>dateTime</datReservation>
+<strExaminerID>string</strExaminerID>
+<strTime>string</strTime>
+<strSpecial Instruction>string</strSpecial Instruction>
+</MakeReservation>
+</soap:Body>
+</soap:Envelope>
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> <soap:Body>
+<MakeReservationResponse xmlns="http://tempuri.org/">
+<MakeReservationResult>
+<IsSuccessful>boolean</IsSuccessful>
+<ConfirmationNumber>string</ConfirmationNumber>
+<ErrorMessage>string</ErrorMessage>
+<ClientID>string</ClientID>
+</MakeReservationResult>
+</MakeReservationResponse>
+</soap:Body>
+</soap:Envelope>
+
+
+======================================================================
+SOURCE: HTML: PM Ordering API Documentation
+======================================================================
+
+CLINICAL CONNECTIVITY
+Ordering API process
+Clinical ordering service
+Portamedic Endpoints
+Sandbox authentication -
+https://auth.integratedtestingservices.com:8020/TokenService/connect/token
+Production authentication -
+https://auth.appslive.com:8020/TokenService_stage/connect/token
+Sandbox – TBD
+Production – TBD
+Submitting a New Case
+Calling the new case Restful service is a two-step process.
+Retrieve an OAuth2 token from the token service.
+Post order data in JSON (see JSON schema) format to API with the token (previous step).
+You must call the authentication API with your credentials (Supplied by Portamedic) for a token.  The token must then be passed with your subsequent orders to the new order API.  The token typically expires in 5 minutes; you can request a new token with each call or use the token until it expires and request a new one.
+Calling the Token Service
+The following curl call can be used to demonstrate the token service, client_id and client_secret will be provided by Portamedic:
+curl -d “grant_type=client_credentials&client_id=CLIENTID&client_secret=CLIENTSECRET"
+https://auth.integratedtestingservices.com:8020/TokenService/connect/token
+Verb: Post
+Body: grant_type=client_credentials&client_id=CLIENTID&client_secret=CLIENTSECRET
+Response Codes
+200 Success
+401 Authentication error
+400 Bad Request
+Response Body:
+{
+"access_token"
+:
+"eyJhJdLCJjbGllbnRfaWQiOiJiMWFhZTZiZS1iNThiLTR.........TBQe_BmQ"
+,
+"expires_in"
+: 300,
+"token_type"
+:
+"Bearer"
+,
+"scope"
+:
+"Clinical.Originator"
+}
+Calling New Case Rest Service
+URL: TBD
+Verb: POST
+Headers: content-type: application/json
+authorization:  Bearer [Token string]
+Body: see attached files for ordering service on single subject or facility visit.
+Response Codes
+200 Success
+401 Authentication error
+400 Bad Request
+Response Body: JSON format order complete with Portamedic internal IDs and reference (Case number) attached sample response.
+Example order:
+{
+Your account number provided by Portamedic
+"accountNumber"
+: 99999,
+"serviceSet"
+: {
+Service name if applicable
+"name"
+:
+"PAD blood marker study"
+,
+Agreed upon id for service
+"refID"
+:
+"7340AFB"
+,
+Ala cart service list
+"services"
+: [
+{
+"serviceName"
+:
+"Blood draw"
+,
+"serviceCode"
+: 56,
+"serviceDesc"
+:
+"Blood Draw"
+,
+"specialInstruction"
+:
+"Fill blue tube only"
+},
+{
+"serviceName"
+:
+"V ultrasound"
+,
+"serviceCode"
+: 37,
+"serviceDesc"
+:
+"Vein ultrasound"
+,
+"specialInstruction"
+:
+"utra sound both legs below the knee to above the ankle"
+}
+]
+},
+Person to be contacted by field office / service provider in case of issue
+"contactPersonName"
+:
+"Jane Doe"
+,
+"contactPhone"
+:
+"1234568899"
+,
+"contactEmail"
+:
+"support@clinical.com"
+,
+Client
+"subject"
+: {
+"subjectType"
+:
+"PERSON"
+,
+"age"
+: 56,
+"firstName"
+:
+"Fred"
+,
+"middleName"
+:
+"I"
+,
+"lastName"
+:
+"TestSubject"
+,
+"addresses"
+: [
+{
+"addressType"
+:
+"BUSINESS"
+,
+"line1"
+:
+"12 Bussines Ave"
+,
+"stateAbbr"
+:
+"NV"
+,
+"city"
+:
+"Smithville"
+,
+"zipCode"
+:
+"11738-222"
+},
+{
+"addressType"
+:
+"HOME"
+,
+"line1"
+:
+"12 Home Way"
+,
+"stateAbbr"
+:
+"NV"
+,
+"city"
+:
+"Smithville"
+,
+"zipCode"
+:
+"11738-222"
+,
+Address where service will be preformed
+"serviceAddress"
+:
+true
+}
+],
+"phones"
+: [
+{
+"phoneType"
+:
+"BUSINESS"
+,
+"phoneNumber"
+:
+"5557889967"
+,
+"ext"
+:
+"234"
+},
+{
+"phoneType"
+:
+"MOBILE"
+,
+"phoneNumber"
+:
+"5558675309"
+},
+{
+"phoneType"
+:
+"HOME"
+,
+"phoneNumber"
+:
+"3446789012"
+}
+],
+"emails"
+: [
+{
+"emailType"
+:
+"PERSONAL"
+,
+"address"
+:
+"TestGuy1256@google.com"
+},
+{
+"emailType"
+:
+"BUSINESS"
+,
+"address"
+:
+"FTestSubject@WorkCo.com"
+}
+]
+},
+"instructions"
+:
+"Please call client ahead of time"
+,
+"appointment"
+:
+"2022-04-16 15:30:00"
+,
+"durationMinutes"
+: 30,
+Your reference number for the order
+"refNumber"
+:
+"739302-3333"
+,
+Your internal ID if necessary
+"ExternalGuid"
+:
+"00000000-0000-0000-0000-000000000000"
+}
+Sample response:
+{
+"visitType"
+:
+"CLINIC"
+,
+"fieldOfficeNumber"
+:
+"04500"
+,
+"accountNumber"
+: 77777,
+"status"
+:
+"ENTERED"
+,
+"statusdate"
+:
+null
+,
+"appsLinkStatus"
+:
+"0"
+,
+"serviceSet"
+: {
+"refID"
+:
+11111
+,
+"name"
+:
+"SCAN4"
+,
+"services"
+:
+null
+},
+"contactPersonName"
+:
+"Fred I Contact"
+,
+"contactPhone"
+:
+"(800)867-5309"
+,
+"contactEmail"
+:
+"Support@client.com"
+,
+"siteNumber"
+:
+null
+,
+"kitID"
+:
+"DF7383820-000078"
+,
+"subject"
+: {
+"subjectType"
+:
+“FACILITY”
+,
+"ssn"
+:
+null
+,
+"licenseNumber"
+:
+null
+,
+"age"
+:
+null
+,
+"dob"
+:
+null
+,
+"subjectID"
+:
+null
+,
+"firstName"
+:
+null
+,
+"middleName"
+:
+null
+,
+"lastName"
+:
+null
+,
+"name"
+:
+"Novex Health Clinic"
+,
+"addresses"
+: [
+{
+"addressType"
+:
+"BUSINESS"
+,
+"line1"
+:
+"852 Test Ave"
+,
+"line2"
+:
+"Suite 101"
+,
+"line3"
+:
+null
+,
+"stateAbbr"
+:
+null
+,
+"state"
+:
+"NC"
+,
+"city"
+:
+"Noplacia"
+,
+"zipCode"
+:
+"28212"
+,
+"serviceAddress"
+:
+true
+,
+"parentID"
+:
+"CLIN1000000000000000000458591261"
+,
+"id"
+:
+"CLIN1000000000000000000458591262"
+,
+"userName"
+:
+"TestClinicalClient"
+}
+],
+"phones"
+: [
+{
+"phoneType"
+:
+"BUSINESS"
+,
+"phoneNumber"
+:
+"7375665555"
+,
+"ext"
+:
+null
+,
+"parentID"
+:
+"CLIN1000000000000000000458591261"
+,
+"id"
+:
+"CLIN1000000000000000000458591264"
+,
+"userName"
+:
+"TestClinicalClient"
+},
+{
+"phoneType"
+:
+"FAX"
+,
+"phoneNumber"
+:
+"7375665556"
+,
+"ext"
+:
+null
+,
+"parentID"
+:
+"CLIN1000000000000000000458591261"
+,
+"id"
+:
+"CLIN1000000000000000000458591265"
+,
+"userName"
+:
+"TestClinicalClient"
+}
+],
+"emails"
+: [
+{
+"emailType"
+:
+"BUSINESS"
+,
+"address"
+:
+"Novex_Noplacia@NovexHealth.com"
+,
+"parentID"
+:
+"CLIN1000000000000000000458591261"
+,
+"id"
+:
+"CLIN1000000000000000000458591263"
+,
+"userName"
+:
+"TestClinicalClient"
+}
+],
+"id"
+:
+"CLIN1000000000000000000458591261"
+,
+"userName"
+:
+"TestClinicalClient"
+},
+"drName"
+:
+null
+,
+Portamedics reference Number
+"caseNumber"
+:
+"CLIN1A347226"
+,
+"externalGuid"
+:
+"00000000-0000-0000-0000-000000000000"
+,
+"refNumber"
+:
+"AH7838-093333"
+,
+"originator"
+: {
+"name"
+:
+null
+,
+"addresses"
+:
+null
+,
+"phones"
+:
+null
+,
+"emails"
+:
+null
+,
+"id"
+:
+"NSC00L00000000000000000000141270"
+,
+"userName"
+:
+null
+},
+Servicing Field Office
+"owningOffice"
+: {
+"officeNumber"
+:
+"04500"
+,
+"name"
+:
+"Charlotte, North Carolina"
+,
+"addresses"
+: [
+{
+"addressType"
+:
+"BUSINESS"
+,
+"line1"
+:
+"1515 Mockingbird Lane"
+,
+"line2"
+:
+"907"
+,
+"line3"
+:
+null
+,
+"stateAbbr"
+:
+"NC"
+,
+"state"
+:
+null
+,
+"city"
+:
+"Charlotte"
+,
+"zipCode"
+:
+"28209"
+,
+"serviceAddress"
+:
+null
+,
+"parentID"
+:
+null
+,
+"id"
+:
+"OFFICE00000000000000000000004500"
+,
+"userName"
+:
+null
+}
+],
+"phones"
+: [
+{
+"phoneType"
+:
+"BUSINESS"
+,
+"phoneNumber"
+:
+"704 522 0392"
+,
+"ext"
+:
+null
+,
+"parentID"
+:
+null
+,
+"id"
+:
+null
+,
+"userName"
+:
+null
+},
+{
+"phoneType"
+:
+"FAX"
+,
+"phoneNumber"
+:
+"704 522 1472"
+,
+"ext"
+:
+null
+,
+"parentID"
+:
+null
+,
+"id"
+:
+null
+,
+"userName"
+:
+null
+}
+],
+"emails"
+: [
+{
+"emailType"
+:
+"BUSINESS"
+,
+"address"
+:
+"mdelguidice@appshq.com"
+,
+"parentID"
+:
+null
+,
+"id"
+:
+null
+,
+"userName"
+:
+null
+}
+],
+"id"
+:
+"OFFICE00000000000000000000004500"
+,
+"userName"
+:
+null
+},
+"examiner"
+:
+null
+,
+Initial Status event
+"events"
+: [
+{
+"code"
+:
+"INFO"
+,
+"message"
+:
+"On site clinic visit"
+,
+"eventDate"
+:
+"2022-12-01T11:23:14.5754089-05:00"
+,
+"appsLinkCode"
+:
+"0"
+,
+"parentID"
+:
+"CLIN1000000000000000000458591266"
+,
+"id"
+:
+"CLIN1000000000000000000458591271"
+,
+"userName"
+:
+"TestClinicalClient"
+}
+],
+"notes"
+:
+null
+,
+"attachments"
+:
+null
+,
+"instructions"
+:
+"Please arrive 15 minutes prior to start"
+,
+"appointment"
+:
+null
+,
+"durationMinutes"
+: 240,
+"id"
+:
+"CLIN1000000000000000000458591266"
+,
+"userName"
+:
+"TestClinicalClient"
+}
+Attachments:
+
+
+======================================================================
+SOURCE: HTML: Schedule4Real API
+======================================================================
+
+Process Requirements
+The carrier will pass the below parameters via Web Service for APPS to return availability.  APPS will provide a list of date and time available to schedule and include the examiner ID #.  Upon selection, in the event if the user “times out” or the selected appointment is no longer available, APPS will pass back a message to the carrier.
+Parameters needed:
+Zip code        = 5-character code
+Gender                = M/F – will also accept Male/Female but will only look at fist letters
+Unique ID         = OrderNo or Policy# can be used (to be determined by carrier)
+Account #        = CompanyID
+Requirements        =
+'BLOOD','EKG','URINE','VITALS'
+Reservation date = MM/DD/YYYY
+Security
+A Username and Password will be assigned to the carrier to include in the requests.
+USERNAME:
+TBD
+PASSWORD:
+TBD
+Endpoints
+Test URL:
+https://www.integratedtestingservices.com/S4R/mainservice.asmx
+Production URL
+:
+https://appslive.com/S4R/mainservice.asmx
+Account Numbers
+To be determined based on the carrier and/or distribution channel.
+Communication Process
+Check Availability
+The carrier will pass the above outlined parameters to APPS.  In return APPS will return the examiner ID and the times available as illustrated below.
+Sample XML
+Sample Return XML with Examiner ID’s and available times
+Make Reservation
+The carrier will pass the same parameters they used to check availability; however, they will also include the selected Examiner ID and available time selected as illustrated
+below
+.
+Successful Return XML Sample
+Unsuccessful Return XML Sample – Message is time/examiner selected is no longer available
+Covering Office Zip Code
+The carrier will have the ability to pass APPS the zip code of the applicant.  In return, APPS will provide the local field office contact information that will cover the zip codes exam.
+Sample Return XML
+API Error Messages list
+
+
+======================================================================
+SOURCE: IMAGE: api_for_portamedic_1.png
+======================================================================
+
+SOAP 1.1
+
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/CheckAvailability"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CheckAvailability xmlns="http://tempuri.org/">
+      <strUserName>string</strUserName>
+      <strUserPassword>string</strUserPassword>
+      <strAccountNumber>string</strAccountNumber>
+      <intAge>short</intAge>
+      <intAmount>int</intAmount>
+      <strGender>string</strGender>
+      <strUniqueID>string</strUniqueID>
+      <strZipCode>string</strZipCode>
+      <strExceptionProduct>string</strExceptionProduct>
+      <strApplicationState>string</strApplicationState>
+      <datReservation>dateTime</datReservation>
+    </CheckAvailability>
+  </soap:Body>
+</soap:Envelope>
+
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <CheckAvailabilityResponse xmlns="http://tempuri.org/">
+      <CheckAvailabilityResult>
+        <ArrayOfString>
+          <string>string</string>
+          <string>string</string>
+        </ArrayOfString>
+        <ArrayOfString>
+          <string>string</string>
+          <string>string</string>
+        </ArrayOfString>
+      </CheckAvailabilityResult>
+    </CheckAvailabilityResponse>
+  </soap:Body>
+</soap:Envelope>
+
+
+======================================================================
+SOURCE: IMAGE: api_for_portamedic_2.png
+======================================================================
+
+CheckAvailability
+
+Test
+
+To test the operation using the HTTP POST protocol, click the 'Invoke' button.
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strAccountNumber: 03034
+intAge: 50
+intAmount: 500000
+strGender: Male
+strUniqueID: 123
+strZipCode: 99999
+strExceptionProduct: (empty)
+strApplicationState: NY
+datReservation: 12/25/2015
+
+Sample Return XML with Examiner ID's and available times
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ArrayOfArrayOfString xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ArrayOfString>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+    <string>NSC00000000000000000000020820587</string>
+  </ArrayOfString>
+  <ArrayOfString>
+    <string>1:00 PM</string>
+    <string>1:15 PM</string>
+    <string>1:30 PM</string>
+    <string>1:45 PM</string>
+    <string>2:00 PM</string>
+    <string>2:15 PM</string>
+    <string>2:30 PM</string>
+    <string>2:45 PM</string>
+    <string>3:00 PM</string>
+    <string>3:15 PM</string>
+    <string>3:30 PM</string>
+  </ArrayOfString>
+</ArrayOfArrayOfString>
+
+
+======================================================================
+SOURCE: IMAGE: api_for_portamedic_3.png
+======================================================================
+
+Make Reservation
+
+The carrier will pass the same parameters they used to check availability; however, they will also include the selected Examiner ID and available time selected as illustrated below.
+
+SOAP 1.1
+
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/MakeReservation"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <MakeReservation xmlns="http://tempuri.org/">
+      <strUserName>string</strUserName>
+      <strUserPassword>string</strUserPassword>
+      <strAccountNumber>string</strAccountNumber>
+      <intAge>short</intAge>
+      <intAmount>int</intAmount>
+      <strGender>string</strGender>
+      <strUniqueID>string</strUniqueID>
+      <strZipCode>string</strZipCode>
+      <strExceptionProduct>string</strExceptionProduct>
+      <strApplicationState>string</strApplicationState>
+      <datReservation>dateTime</datReservation>
+      <strExaminerID>string</strExaminerID>
+      <strTime>string</strTime>
+      <strSpecialInstruction>string</strSpecialInstruction>
+    </MakeReservation>
+  </soap:Body>
+</soap:Envelope>
+
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <MakeReservationResponse xmlns="http://tempuri.org/">
+      <MakeReservationResult>
+        <IsSuccessful>boolean</IsSuccessful>
+        <ConfirmationNumber>string</ConfirmationNumber>
+        <ErrorMessage>string</ErrorMessage>
+        <ClientID>string</ClientID>
+      </MakeReservationResult>
+    </MakeReservationResponse>
+  </soap:Body>
+</soap:Envelope>
+
+
+======================================================================
+SOURCE: IMAGE: api_for_portamedic_4.png
+======================================================================
+
+WebService1
+
+Click here for a complete list of operations.
+
+MakeReservation
+
+Test
+
+To test the operation using the HTTP POST protocol, click the 'Invoke' button.
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strAccountNumber: 03034
+intAge: 50
+intAmount: 500000
+strGender: Male
+strUniqueID: 123
+strZipCode: 99999
+strExceptionProduct: (empty)
+strApplicationState: NY
+datReservation: 12/25/2015
+strExaminerID: NSC00000000000000000000020820587
+strTime: 1:00 PM
+strSpecialInstruction: This is a test.
+
+Successful Return XML Sample
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseObject xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsSuccessful>true</IsSuccessful>
+  <ConfirmationNumber>bea5cf96-dc25-4390-adfa-76e6cb2973a5</ConfirmationNumber>
+  <ErrorMessage/>
+  <ClientID>123</ClientID>
+</ResponseObject>
+
+Unsuccessful Return XML Sample – Message is time/examiner selected is no longer available
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseObject xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsSuccessful>false</IsSuccessful>
+  <ConfirmationNumber/>
+  <ErrorMessage>Specified time is not available for this examiner - 1:00 PM - WRONGINFOHERE---------- :o)</ErrorMessage>
+  <ClientID>123</ClientID>
+</ResponseObject>
+
+
+======================================================================
+SOURCE: IMAGE: api_for_portamedic_5.png
+======================================================================
+
+Covering Office Zip Code
+
+The carrier will have the ability to pass APPS the zip code of the applicant. In return, APPS will provide the local field office contact information that will cover the zip codes exam.
+
+SOAP 1.1
+
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/OfficeCoveringZipCode"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <OfficeCoveringZipCode xmlns="http://tempuri.org/">
+      <strUserName>string</strUserName>
+      <strUserPassword>string</strUserPassword>
+      <strZipCode>string</strZipCode>
+    </OfficeCoveringZipCode>
+  </soap:Body>
+</soap:Envelope>
+
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <OfficeCoveringZipCodeResponse xmlns="http://tempuri.org/">
+      <OfficeCoveringZipCodeResult>
+        <OfficeNumber>string</OfficeNumber>
+        <DisplayName>string</DisplayName>
+        <Street>string</Street>
+        <AptNumber>string</AptNumber>
+        <City>string</City>
+        <State>string</State>
+        <ZipCode>string</ZipCode>
+        <Phone>string</Phone>
+        <Fax>string</Fax>
+        <EmailAlias>string</EmailAlias>
+      </OfficeCoveringZipCodeResult>
+    </OfficeCoveringZipCodeResponse>
+  </soap:Body>
+</soap:Envelope>
+
+
+======================================================================
+SOURCE: IMAGE: api_for_portamedic_6.png
+======================================================================
+
+WebService1
+
+Click here for a complete list of operations.
+
+OfficeCoveringZipCode
+
+Test
+
+To test the operation using the HTTP POST protocol, click the 'Invoke' button.
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strZipCode: 11364
+
+Sample Return XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeInfo xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OfficeNumber>01100</OfficeNumber>
+  <DisplayName>New York City, New York</DisplayName>
+  <Street>42-40 Bell Blvd.</Street>
+  <AptNumber>305</AptNumber>
+  <City>Bayside</City>
+  <State>NY</State>
+  <ZipCode>11361</ZipCode>
+  <Phone>718-225-9300</Phone>
+  <Fax>718-423-9505</Fax>
+  <EmailAlias>NewYorkCity.NY@APPSdom.com</EmailAlias>
+</OfficeInfo>
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image1.png
+======================================================================
+
+TECHNICAL CONNECTIVITY - Schedule4Real API (Title page)
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image2.png
+======================================================================
+
+TECHNICAL CONNECTIVITY | Schedule4Real API (Header)
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image3.png
+======================================================================
+
+(Decorative blue gradient header)
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image4.png
+======================================================================
+
+SOAP 1.1
+
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+
+POST /MainService.asmx HTTP/1.1
+Host: localhost
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://tempuri.org/CheckAvailability"
+
+CheckAvailability Request Parameters:
+- strUserName: string
+- strUserPassword: string
+- strAccountNumber: string
+- intAge: short
+- intAmount: int
+- strGender: string
+- strUniqueID: string
+- strZipCode: string
+- strExceptionProduct: string
+- strApplicationState: string
+- datReservation: dateTime
+
+CheckAvailability Response:
+Returns ArrayOfString with examiner IDs and available times.
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image5.png
+======================================================================
+
+Sample Return XML with Examiner ID's and available times
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ArrayOfArrayOfString xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ArrayOfString>
+    <string>NSC00000000000000000000020820587</string>
+    (11 examiner IDs)
+  </ArrayOfString>
+  <ArrayOfString>
+    <string>1:00 PM</string>
+    <string>1:15 PM</string>
+    <string>1:30 PM</string>
+    <string>1:45 PM</string>
+    <string>2:00 PM</string>
+    <string>2:15 PM</string>
+    <string>2:30 PM</string>
+    <string>2:45 PM</string>
+    <string>3:00 PM</string>
+    <string>3:15 PM</string>
+    <string>3:30 PM</string>
+  </ArrayOfString>
+</ArrayOfArrayOfString>
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image6.png
+======================================================================
+
+WebService1 - CheckAvailability Test
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strAccountNumber: 03034
+intAge: 50
+intAmount: 500000
+strGender: Male
+strUniqueID: 123
+strZipCode: 99999
+strExceptionProduct: (empty)
+strApplicationState: NY
+datReservation: 12/25/2015
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image7.png
+======================================================================
+
+WebService1 - MakeReservation Test
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strAccountNumber: 03034
+intAge: 50
+intAmount: 500000
+strGender: Male
+strUniqueID: 123
+strZipCode: 99999
+strExceptionProduct: (empty)
+strApplicationState: NY
+datReservation: 12/25/2015
+strExaminerID: NSC00000000000000000000020820587
+strTime: 1:00 PM
+strSpecialInstruction: This is a test.
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image8.png
+======================================================================
+
+SOAP 1.1 - MakeReservation
+
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+
+MakeReservation Request Parameters (same as CheckAvailability plus):
+- strExaminerID: string
+- strTime: string
+- strSpecialInstruction: string
+
+MakeReservation Response:
+- IsSuccessful: boolean
+- ConfirmationNumber: string
+- ErrorMessage: string
+- ClientID: string
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image9.png
+======================================================================
+
+Unsuccessful Return XML Sample
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseObject xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsSuccessful>false</IsSuccessful>
+  <ConfirmationNumber/>
+  <ErrorMessage>Specified time is not available for this examiner - 1:00 PM - WRONGINFOHERE---------- :o)</ErrorMessage>
+  <ClientID>123</ClientID>
+</ResponseObject>
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image10.png
+======================================================================
+
+Successful Return XML Sample
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ResponseObject xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsSuccessful>true</IsSuccessful>
+  <ConfirmationNumber>bea5cf96-dc25-4390-adfa-76e6cb2973a5</ConfirmationNumber>
+  <ErrorMessage/>
+  <ClientID>123</ClientID>
+</ResponseObject>
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image11.png
+======================================================================
+
+WebService1 - OfficeCoveringZipCode Test
+
+Parameter | Value
+strUserName: ABC
+strUserPassword: 123
+strZipCode: 11364
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image12.png
+======================================================================
+
+(Tim McCabe signature/name)
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image13.png
+======================================================================
+
+SOAP 1.1 - OfficeCoveringZipCode
+
+Request Parameters:
+- strUserName: string
+- strUserPassword: string
+- strZipCode: string
+
+Response:
+- OfficeNumber: string
+- DisplayName: string
+- Street: string
+- AptNumber: string
+- City: string
+- State: string
+- ZipCode: string
+- Phone: string
+- Fax: string
+- EmailAlias: string
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image14.png
+======================================================================
+
+API Error Messages List
+
+Error | Description
+"strUserName cannot be blank" | Username is required
+"strUserPassword cannot be blank" | Password is required
+"The user is invalid" | Username/password combo not in db
+"strAccountNumber must be 5 chars long." | Account number must be 5 chars
+"strAccountNumberCompanion must be 5 chars long." | Account number must be 5 chars
+"intAge is invalid, < 1 or > 120." | Age is invalid
+"intAgeCompanion is invalid, < 1 or > 120." | Age is invalid
+"intAmount is invalid, < 0 or > 50000000" | Insurance amount is invalid
+"intAmountCompanion is invalid, < 0 or > 50000000" | Insurance amount is invalid
+"strGender is invalid, (M|F|U|Male|Female|Unknown|{blank})" | Gender is invalid
+"strGenderCompanion is invalid, (M|F|U|Male|Female|Unknown|{blank})" | Gender is invalid
+"strUniqueID cannot be empty." | Unique ID is required
+"strUniqueIDCompanion cannot be empty." | Unique ID is required
+"strUniqueID already exists in the database." | Unique ID must be unique/already existing in db
+"strUniqueIDCompanion already exists in the database." | Unique ID must be unique/already existing in db
+"strZipCode must be at least 5 digits long" | Zip code must be at least 5 chars long
+"strZipCode first five chars must contain numerics only" | Zip code must be numeric
+"datReservation must be at least 5 days out" | Reservation date is too soon
+"AccountNumber is invalid" | Account number not found in db
+"AccountNumberCompanion is invalid" | Account number not found in db
+"An Application State is needed." | Requirements vary by state for this account, app state needed
+"An Exception Product is needed." | Requirements vary by product for this account, product needed
+"No requirements are needed." | No requirements found for APPS to perform
+"There are no examiners who can cover this scenario." | No examiners cover this zip code with required equipment
+"There are no examiners who can cover this date." | Examiners cover this zip code with required equipment, just not on this date
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image15.png
+======================================================================
+
+APPS Para Medical Services Logo
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image16.png
+======================================================================
+
+Sample Return XML - OfficeCoveringZipCode
+
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeInfo xmlns="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OfficeNumber>01100</OfficeNumber>
+  <DisplayName>New York City, New York</DisplayName>
+  <Street>42-40 Bell Blvd.</Street>
+  <AptNumber>305</AptNumber>
+  <City>Bayside</City>
+  <State>NY</State>
+  <ZipCode>11361</ZipCode>
+  <Phone>718-225-9300</Phone>
+  <Fax>718-423-9505</Fax>
+  <EmailAlias>NewYorkCity.NY@APPSdom.com</EmailAlias>
+</OfficeInfo>
+
+
+======================================================================
+SOURCE: IMAGE: Technical - image17.png
+======================================================================
+
+(Blank/decorative image)
+

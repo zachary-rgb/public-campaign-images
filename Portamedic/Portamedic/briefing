@@ -1,0 +1,217 @@
+Dec 15, 2025
+EXACT Integration - Needs & Due Dates - Transcript
+00:00:00
+ 
+Cori Davis: Does that sound good to y'all?
+Noah Debrincat: Um,
+Cori Davis: Okay.
+Noah Debrincat: yeah, sure. Let's just hope it's working.
+Cori Davis: What are you going to
+Noah Debrincat: Did we Did we This is happening on Walgreens tenant, right? Okay,
+Cori Davis: correct? So um the first thing is around portic um there is a fair amount of information that is in the actually let me just pull it up so that we are all know what's happening maybe and the real reason for this is I really need timelines to give to Walgreens on when I need things from their vendors that they're using on this study. Just so you guys know what essentially is happening here. Um, so I'm just going to share my entire screen. Hope you guys feel like seeing all the bad news everywhere. Okay, so Portic um has an account number which we're still waiting on. Um I'm assuming all of these are fields that I would be able to fill out as well. Um I don't know if we need to do anything.
+ 
+ 
+00:01:34
+ 
+Noah Debrincat: Get
+Cori Davis: No to like if I turn this on and I put the account number and I put all this information does engineering have to do any work
+Noah Debrincat: those.
+Cori Davis: to make this work? Like is everything in the front
+Noah Debrincat: Um,
+Cori Davis: end?
+Noah Debrincat: there is an engineering ticket. You need Kodama to turn these on. I believe he turned them off because we were getting erroneous logs from it. Um, I don't know if he turned all of them off, some of them off, but there is a ticket that basically he needs to tell tell them
+Cori Davis: Okay. Um and then similarly can these be configured
+Noah Debrincat: off.
+Cori Davis: differently in sandbox and production? I don't really remember.
+Noah Debrincat: I would have to sit down and try to configure that, Corey. I'm not quite sure.
+Cori Davis: Well,
+Noah Debrincat: I believe that I believe that these fields here are exactly the same.
+Cori Davis: unless
+Noah Debrincat: The field that will be different is in Nera blood draw the higher level.
+ 
+ 
+00:02:40
+ 
+Noah Debrincat: There's a key that you have to put in and I'd assume that that key is different based on environment. So go to Nera blood draw at the top there. Yep. Perfect. Settings.
+Cori Davis: that's only for
+Noah Debrincat: Yes. This is different based on which environment you're in.
+Cori Davis: Okay. So, do I need more than one of these?
+Noah Debrincat: Uh yes, you need you need two of those.
+Cori Davis: Like,
+Noah Debrincat: But those don't come from Portic. Those come from
+Cori Davis: okay.
+Noah Debrincat: us.
+Cori Davis: Okay. So, Okay. Um, I have the same questions about data vamp, but I think we're actually going to need work on this one. Um, right now in data vant. Um, there's nothing that like unless this is it. I assume that this slug is like study specific and then if that's the case, we'll get that. But we configured this uh all this UI specific to Nerra. Um, in this study, we want to be able to trigger record retrievalss, which I think I could still do here, but it's going to be based on a yes, like a question in a form.
+ 
+ 
+00:04:28
+ 
+Noah Debrincat: which is not currently a feature or it
+Cori Davis: Do you want I You're
+Noah Debrincat: is.
+Cori Davis: a product guy. Right now,
+Noah Debrincat: Um
+Cori Davis: it was like medical procedure date and then trigger after days. So, this like was the trigger based on my understanding.
+Noah Debrincat: um can you separate them from forms, Corey? Can you do two different forms uh two different activities, two different visits, like two different data captures?
+Cori Davis: What? What would that solve for me?
+Noah Debrincat: So you would make the trigger off of the second one and you'd only show the second one if the first one is true. Does that make
+Cori Davis: So,
+Noah Debrincat: sense?
+Cori Davis: you want me to have a medical procedure date like confirmation form that they put in that procedure date and then use the same trigger after days field.
+Noah Debrincat: Say it one more time, Corey.
+Cori Davis: So,
+Noah Debrincat: I missed that.
+Cori Davis: you're asking me to have the patient enter a medical procedure date and then have a secondary form somewhere where a site confirms that medical procedure date and that initiates the request.
+ 
+ 
+00:05:38
+ 
+Noah Debrincat: Didn't you just say that this needs to trigger based on uh data
+Cori Davis: Yeah, it's just a do you want to collect records or like do you want to send data van a record because they have more than one medical record
+Noah Debrincat: field?
+Cori Davis: uh vendor potentially. So it's do you want to send a data event?
+Noah Debrincat: You would put
+Cori Davis: Yes, no. If yes, what is the medical procedure date?
+Noah Debrincat: you
+Cori Davis: And then we'll just do the same calculation as always is what you're asking for.
+Noah Debrincat: I need to double check that we don't have the logic to do this a different way. But yeah, my advice to you would be like, do you want to do a medical record form? Yes. No. If you say yes, it opens another activity or form where you can fill out whatever. And then that's the form that you trigger it off of. basically after they've gone to the yes
+Cori Davis: I don't have a that you can't Okay, that's my confusion.
+ 
+ 
+00:06:30
+ 
+Cori Davis: Okay, we're misaligned completely.
+Noah Debrincat: flow.
+Cori Davis: You can't the triggers for events. Uh um hold on. You don't have I guess. Do we even have the ability to send a null medical? Like I don't know. I guess you'll just have to write that out for me. I'm I'm not going to figure out how to do that right now.
+Noah Debrincat: Okay. s***.
+Cori Davis: Um but that's probably not the only question outstanding.
+Noah Debrincat: Sugar base.
+Cori Davis: So
+Noah Debrincat: Is there a possibility that they submit that form without a without a fe without a date field there?
+Cori Davis: who the patient or if I have a separate one for the site to enter the same date the
+Noah Debrincat: In the way in the way that you were thinking about it,
+Cori Davis: patient.
+Noah Debrincat: is it possible for the that data field to be empty on forms
+Cori Davis: Here's the issue with data the the I don't care about a medical procedure date on this study so much. I mean I do but I I also don't.
+ 
+ 
+00:07:29
+ 
+Noah Debrincat: today?
+Cori Davis: There's also backend logic that is a start and an end date that we send data vant to collect the records in. I have no way of configuring that or knowing what they are. Um, so clearly there would need to be a date somewhere in order for a start or end date to exist,
+Noah Debrincat: Mhm.
+Cori Davis: but I don't know the backend logic on what that looks like right now. So that's something else we're going to have to dive
+Noah Debrincat: Okay. Okay.
+Cori Davis: into.
+Noah Debrincat: I'm a little brain dead right now, so I I'll help you with that.
+Cori Davis: Um okay. Um the other thing is JPM and so right now with the JPM integration um you can map all your fields and you can trigger it fine. I'm sure the one thing that isn't configurable in the UI is what um what program they're assigned to and this study will have a different JPM account program ID. I don't know what they're called a JPM. Um assuming we finish the work on adding that.
+ 
+ 
+00:08:45
+ 
+Cori Davis: So basically what I'm saying is like even if we did the work to set it up properly wherever that ticket exists for a virtual card, I don't even know if it exists yet. Um we also need a way to configure different ones without causing regressions on all of the ones that are currently running. Does that make sense?
+Noah Debrincat: Uh yeah, that's a ticket for sure. Um it might be as simple as the it might be as simple as that account ID,
+Cori Davis: Okay.
+Noah Debrincat: but uh I have to check with the engineers for sure.
+Cori Davis: Okay. Um and then the last thing is depending on what we do with Porttometic, they really want us to retrieve statuses from Porttomatic. Um, if nothing else, Storm, that was like if we did know, if we didn't do the complete enhancement work right off the bat, which we can get to later, they really want statuses. Um, and so we need to scope that. And then I also need to know when we need everything from Portatic in order to meet the timeline to get
+ 
+ 
+00:09:46
+ 
+Noah Debrincat: Um, if I'm not mistaken,
+Cori Davis: that.
+Noah Debrincat: uh, they have statuses because they're doing Axel now. No,
+Cori Davis: Um maybe.
+Noah Debrincat: if that's the case, that's a whole new
+Storm Stillman: No,
+Cori Davis: No,
+Noah Debrincat: integration.
+Cori Davis: it's a web.
+Storm Stillman: it's our same we they're using their same API to piggyback
+Cori Davis: just
+Storm Stillman: Axel.
+Noah Debrincat: They didn't have APIs.
+Cori Davis: Yeah.
+Noah Debrincat: They have They don't have APIs. They have uh something called I can't remember what it is.
+Storm Stillman: Soap.
+Noah Debrincat: There's no APIs in the programmatic integration soaps. I don't think Axel is using
+Storm Stillman: Soap
+Cori Davis: No. So,
+Noah Debrincat: soaps.
+Cori Davis: Axel, we need to ignore. It's like we're not even talking to Axel at all. So everything that everything that Porto has built is literally like feeding
+Noah Debrincat: Okay.
+Cori Davis: Axel into their technology and then throughout the thing our understanding based on our conversations with them is that whatever this is this status is um available to be grabbed
+ 
+ 
+00:10:47
+ 
+Noah Debrincat: Okay. Can I get the documentation for the soaps?
+Cori Davis: potentially
+Noah Debrincat: And are we doing this storm? This has already decided that we're doing this status
+Storm Stillman: Uh I think we need to know when we have to do it by and SOAP is an API.
+Noah Debrincat: thing.
+Cori Davis: unless unless Unless it's
+Storm Stillman: It's a different type of API for the
+Cori Davis: basically like we need to do this and then we do eventually we're they're paying us for it.
+Storm Stillman: record.
+Cori Davis: We need to follow up on this integration to also do better.
+Storm Stillman: I hate that we're doing this in web app so much.
+Noah Debrincat: Okay. Um,
+Cori Davis: And here is that information for you if you would like that. So eventually we need to be able to send actual appointment times based on their real-time availability. If no availability exists, Carebase will transmit details without a time date which allows Port Automatic to go through their unscheduled appointment path. Um and then confirmed appointment times and status updates, blowback, whatever.
+ 
+ 
+00:11:48
+ 
+Noah Debrincat: Do we have timelines for this?
+Cori Davis: That's why I'm here.
+Noah Debrincat: Okay, perfect. Um, yeah. Uh, I will, uh, spend a couple hours on this, make sure that I get the engineering's input and, um, give you some sort of deadlines for for what we'll need to make it happen.
+Cori Davis: Okay. Are you aware of the current timelines that we're working with?
+Noah Debrincat: Nope.
+Cori Davis: Do you want them?
+Noah Debrincat: Yeah.
+Cori Davis: What do you want?
+Noah Debrincat: Whatever you got.
+Cori Davis: Okay. Well, I was originally operating under the assumptions that some of this I would be able to do myself. Um, I'll just share with you the sheet and if you need to move any of this, you can do so. Okay. Um, is this everything? Okay. When will I have dates from you?
+Noah Debrincat: Um, let me just check my calendar tomorrow. If not tomorrow, end of the day, then Wednesday. Oh, yeah. I should be fine by tomorrow. End of day.
+ 
+ 
+00:14:12
+ 
+Noah Debrincat: Quick.
+Cori Davis: I'm just gonna write Wednesday. Okay.
+Noah Debrincat: Beautiful.
+Cori Davis: Um um if all goes well, we can then just stop uh we can stop junction and we'll just use portmatic when you enhance that workflow. It'll be great.
+Storm Stillman: Except we can't order labs.
+Cori Davis: The lab ordering is fine through junction. It's all the scheduling pieces and the labor. I guess we'd still
+Storm Stillman: Oh, so we'll order the labs through junction.
+Cori Davis: need
+Storm Stillman: Okay, that we're paying way too much money for lab ordering.
+Cori Davis: it would need manual work to get the rec the
+Storm Stillman: And we could just integrate with health gorilla
+Cori Davis: order. Love it. End of day Wednesday equals product response on time.
+Storm Stillman: do
+Cori Davis: Okay. Um, I also need like and when I mean timelines, I'm like when do we need stuff from the like vendor
+Noah Debrincat: Yep,
+Cori Davis: spy?
+Noah Debrincat: that's totally fine.
+Cori Davis: Okay, here I send you the
+Noah Debrincat: All right. Very excited about it.
+Cori Davis: port.
+Noah Debrincat: So excited to work on Partatic again.
+Cori Davis: Just reboot it in zero.
+Noah Debrincat: So excited.
+Cori Davis: It's fine.
+Noah Debrincat: So excited. All right, I will pencil in an hour of my time and get an engineer to weigh in on the timelines
+Cori Davis: Perfect.
+Noah Debrincat: tomorrow.
+Cori Davis: Is there anything else you need from our side right
+Noah Debrincat: Um,
+Cori Davis: now?
+Noah Debrincat: I might have missed something, so I'll just message you tomorrow if there is.
+Cori Davis: Okay. Please include Doc.
+Noah Debrincat: I will.
+ 
+ 
+Transcription ended after 00:16:21
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.

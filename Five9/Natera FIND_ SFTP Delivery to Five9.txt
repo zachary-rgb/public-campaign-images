@@ -1,0 +1,61 @@
+SFTP Delivery to Five9
+
+Curebase automatically uploads “.csv” files daily to:[1][2][3][4]
+
+SANDBOX
+s3://sftp-walgreens-sandbox/walgreens/OUT/XXXX/
+PRODUCTION
+s3://sftp-walgreens/walgreens/OUT/XXXX/
+
+ONE file generated:
+
+FileNATERA_FIND_stuck_in_journey_YYYY-MM-DD.csv.pgp
+Each file has the following information:
+
+
+File SpecificationsREASON_FOR_CALLNeeds ConsentIncomplete SurveyMissing ColonoscopyCUREBASE_ID?CUSTOM_ID02-XXXX if available, else nullPROTOCOL_ID“FIND”FIRST_NAMEParticipant First NameLAST_NAMEPRIMARY_PHONEPATIENT_LANGUAGE“E” = English, “S” = SpanishDOBFormat: YYYY-MM-DDADDRESSADDRESS2CITYSTATETwo-letter abbreviation: e.g. New York = NYZIP CODE
+
+
+Curebase removes participants from the list when the following criteria are not met:[5][6]
+
+? Phone number is not 10 digits.
+? Zip code is missing or it is not 5 digits.
+? State is missing or it is not 2 letters.
+
+Curebase also removes participants from the list when the following criteria are met:[7][8]
+
+? Participant has previously been on the list
+? For example, if a participant meets the criteria for the list two (2) days in a row, they will only be on the list on day one (1).
+? If participant is moved to withdrawn, opted-out, failed screening, failed pre-screening
+
+Participants are added to each list based on the following criteria:[9][10]
+
+Needs Consent- User has been in “INFORMED_CONSENT” state for more than 24 hours.Incomplete Survey- User has been in “PRESCREENING” state for more than 48 hours.Missing Colonoscopy- User has not completed “COLONOSCOPY_DATE” visit 48 hours after opening it.
+
+Other Miscellaneous Requirements:
+
+? Participants that enter states on Friday/Saturday/Sunday are included in the file on Mondays
+? No SFTP files are generated if there are zero (0) participants that meet the list criteria
+
+
+
+
+Internal Use Only
+
+Pre-GO LIVE checklist:
+
+? Switch the directory to production
+? Add production trialId to script filters
+? Make sure we only send .PGP (no .CSV files should be generated)
+? Make sure we update the attribute for the Curebase ID
+
+Question: why do we not send Fri thru Sun if these are automated?
+If I remember correctly/things have not changed, there is a manual component to the flow once it reaches the final Five9 location. The files are added manually to Five9, therefore the last file loaded occurs on friday morning for the Thursday file sent at night, and the first file loaded in on Monday is the file that was sent on sunday night.
+- Natalia
+Need updated sFTP path
+Would we still exclude ppts or can validation exist on the ppt-facing side?
+yes, calls cannot happen if these elements are incorrect because the call center has call times and requirements that vary by state to state.
+Delta files (non-cumulative, net new) based on these criteria?
+From previous set up, Five9 will keep participants and attempt 3 calls then they get dispositioned. Therefore, only new participants should be sent to the lists.  - Natalia
+Need to confirm details
+See trigger comment - Natalia

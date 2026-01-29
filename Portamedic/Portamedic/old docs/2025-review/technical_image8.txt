@@ -1,0 +1,17 @@
+SOURCE: Technical connectivity - image8.png
+============================================================
+
+SOAP 1.1 - MakeReservation
+
+The following is a sample SOAP 1.1 request and response. The placeholders shown need to be replaced with actual values.
+
+MakeReservation Request Parameters (same as CheckAvailability plus):
+- strExaminerID: string
+- strTime: string
+- strSpecialInstruction: string
+
+MakeReservation Response:
+- IsSuccessful: boolean
+- ConfirmationNumber: string
+- ErrorMessage: string
+- ClientID: string

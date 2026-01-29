@@ -1,0 +1,51 @@
+00:01 Hey guys, so I'm going to give an overview on how integrations Works, right? So how web app integrations work together First of all, what you need is having integrations running here, right?
+00:15 And have the web app running here, right? So here I'm logging I'm on localhost, and the first thing you need, which is really important, is having these three studies here.
+00:28 So each study is a test study that I created for each integration. So they just have the minimum amount of configuration to be able to run.
+00:36 To test this individual integration, so they are pretty good to, like, for development to test the integration, the events, right?
+00:47 So the first thing you need here is, go to one of these, and check this guy right here. You should have this value saved, right?
+00:56 This is not saving the configuration itself, it's saved on the database level, so if you refresh the database, like you refresh all the data, or you just imported the study, you won't have this value.
+01:09 So add this value, save it, you should be good. When you have this setup, this webhook URL setup, what happens is, every time a user does a set of actions, we trigger a, we trigger an event.
+01:30 So you can see here, when the user submits a form, we send a onSubmit event. This is basically an event.
+01:36 We an API called twoIntegrations API, right. I'm going to show this in first hand, so you can understand how it works.
+01:44 But you can see all of these interactions between webapp and integrations on the integrations tab, right. So this is like the participant data, let's say.
+01:54 So the data that we store on the integration side when things are triggered. So we keep the the history log of everything that we triggered, right.
+02:04 The data that we send, the the success responses. So this is about that. And this event about is about all the interactions.
+02:13 Just keep in mind that we are changing this to only to be able to configure things on the web app side to trigger specific events, to trigger specific actions, specific integrations.
+02:25 So we don't need to kind of flood the API with a lot of different events and and have all the logical integrations API side.
+02:34 We want things to be 100% configured on the web app. And the integrations just do like the, let's say a meter where we grab the events, do the API calls, save the logs, and that's it.
+02:47 And we follow along. So just keep in mind, this project is going to evolve in that direction. So that's important.
+02:54 Uhm, and Okay, so I'm going to show how this works in practice. The most simple, uhm, study that we have here is VDoc, right?
+03:06 So, you can just save everything here. I'm going to deploy this, and I'm going to show what happens on the integration side.
+03:24 Okay, so if we go here, we can see we triggered a few on-submit forms, right, and on the integration side, we can see we have the vents triggering here, right.
+03:41 So to see, to actually see the logic, understand this logic, I have a working branch, so ignore that. So basically to see this logic, you go to event controller, and you go to this endpoint.
+03:55 So all events gets in this controller, right. Basically what happens is we filter, we filter all the events to only the events that we care about, and for the events that we care about, we actually check the logic here.
+04:12 So the integrations API, they fetch all the data from QBase So once we have an event that is important to trigger something, we fetch the participant data as usual.
+04:25 We fetch the form data from our API, we fetch document data from the API, we save the participant data on our side, and the integrations responses on our side.
+04:42 But we don't save like from forms or documents. We just fetch the latest from the API because we had problems in the past where we were kind of saving outdated data on the integration side and this was leading to a lot of issues.
+04:57 So the new strategy here is just fetch documents data from our API, fetch forms data from their API, and so we already have this logic.
+05:06 So once you have that and you have this data you basically just need to check if this event should trigger VDoc or if it should trigger DataVan or it should trigger Protomatic.
+05:20 So each of these integrations have their own services, right. So here here if I triggered an event that should send things to VDoc I'm going to process this event, right.
+05:36 So you can search for VDocService and here you have the process event data and here you will see we will do something some validations to see if we have all the data we need.
+05:47 If we do have all the data we need we are going to do to call their API and then we are going to save the logs.
+05:55 So we save if it was success successfully, if it failed, so we we we save that kind of stuff, right.
+06:05 So you can see here if it failed we have the service logger which logs the results of each request, each request attempt, right.
+06:15 So we have pending, success and failed, right. So we keep track of everything, all the calls that we are doing, this is really important.
+06:25 So if you want to check DataVend as well, the same thing, it has the same processEventData function, it will do some validations to see if we have all the data, it will trigger the action that we need, right, and it will log everything, right.
+06:43 So all of this then follow the same pattern basically, right. So let me just show you. So here specifically for VDoc, things are triggered when I sign Informed Consent, right.
+06:58 So when I sign Informed Consent and I have some basic data. of the participant, VDoc will be triggered. We can see here the event was sent.
+07:12 If we check here we can see uh we started to trigger the VDoc service, right? And this is the VDoc data that was that was sent to them.
+07:23 So let's just refresh here real quick. You can go to the raw data. You can all of this that you're seeing comes from the integrations database.
+07:35 So we call the integrations API to fetch this data back so we can show on the web app. And you can see here we have inside we have here like data uh automatic we have inside services.
+07:49 We have DataVans, nothing was triggered to DataVans. We have VDoc, VDoc was triggered, send participant data logs. It was triggered here, right.
+07:59 So we send this data, it was successfully all good and we didn't trigger anything for automatic. So that's how you know things worked, right.
+08:10 And going here, basically what happens is if you go here, let me show how things are actually configured. So if you go on the integration side, you can see here.
+08:26 We have this slug of the data field where we should fetch this information, right? So on the integrations API side, we fetch the form data that was submitted for that participant.
+08:37 And based on this configuration, we know where to fetch these attributes that we are going to send on the integration integration, right?
+08:47 And this enables or disables the integration, right? This check right here, uh, the changes that we are going to happen on, um, on the future for, for integrations is that we are going to actually, uh, configure each into each event on the events tab.
+09:06 Right, so this doesn't exist yet, it's only on my branch, but this is going to happen in the future, right?
+09:12 So you can see here, we trigger a specific event to send participant data when a form of consent is signed, and we trigger again if a form is submitted, right?
+09:23 But right now, on v2, what happens is we check if you added a form, we check if we should trigger again the doc or not, and if you sign a document, we check if you have informed consent signed or not, based on the form and on the document's data we fetched from the API, and then we trigger things.
+09:44 So we basically want to, we want to have a lot of business logic on the Integrations API side, we want to have all the business logic on the web app, and have the minimum amount of business logic on the Integrations API side, so we can configure everything here, and if the roles change, we can change
+10:00 on the web app, and the Integrations API just keep doing the calls, basically just being a connector, a middleware, between a bunch of integrations and the web app, so that's the core idea here, and DataVan and Portomatic, they work the same way, I think the only difference series for problematic, you
+10:21 will need to. to actually configure a site and a user, so we can configure availability, because things are triggered when you scheduled, when you schedule a visit, basically, but yeah, is an overview on how the web app works with the integrations, and uhm.
+10:42 a little bit about future work on how things are, are working now, and how things will start to work in the future, so we can account for that.
