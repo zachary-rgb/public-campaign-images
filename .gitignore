@@ -1,21 +1,26 @@
-# Ignore everything by default
-*
+# Image-only repository for campaign assets
+# Only campaign_images_* folders inside JSONGenerator are tracked
 
-# But allow specific directories needed for image uploads
-!JSONGenerator/
-JSONGenerator/*
+# Ignore everything at root
+/*
 
-# Allow image folders inside JSONGenerator (campaign_images_* format)
-!JSONGenerator/campaign_images_*/
-!JSONGenerator/campaign_images_*/**
+# EXCEPT: Allow these at root
+!/.gitignore
+!/README.md
+!/JSONGenerator/
 
-# Allow .gitignore itself
-!.gitignore
+# Inside JSONGenerator, ignore everything
+/JSONGenerator/*
 
-# Allow README (optional - remove if you don't want it)
-!README.md
+# EXCEPT: Allow campaign_images_* folders
+!/JSONGenerator/campaign_images_*/
+!/JSONGenerator/campaign_images_*/**
 
-# Python artifacts - keep ignored
+# ===========================================
+# Everything below is always ignored
+# ===========================================
+
+# Python artifacts
 **/__pycache__/
 **/*.pyc
 **/*.pyo
@@ -25,7 +30,7 @@ JSONGenerator/*
 **/*.egg-info/
 **/.pytest_cache/
 
-# IDE and system files - keep ignored
+# IDE and system files
 **/.vscode/
 **/.idea/
 **/*.swp
@@ -34,21 +39,21 @@ JSONGenerator/*
 **/.DS_Store
 **/Thumbs.db
 
-# Project files - keep ignored
-*.docx
-*.xlsx
-*.xls
-*.tsv
-*.json
-*.md
+# Project files (always keep private)
+**/*.docx
+**/*.xlsx
+**/*.xls
+**/*.tsv
+**/*.json
+**/*.md
 !README.md
-*.py
-*.txt
-!requirements.txt
+**/*.py
+**/*.txt
+**/*.bat
+**/*.vba
 
 # Keep credentials and config files private
 **/credentials.json
 **/token.json
 **/.env
 **/config.ini
-
