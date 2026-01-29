@@ -1,0 +1,50 @@
+# Ignore everything by default
+*
+
+# But allow image folders (campaign_images_* format)
+!campaign_images_*/
+!campaign_images_*/**
+
+# Allow .gitignore itself
+!.gitignore
+
+# Allow README (optional - remove if you don't want it)
+!README.md
+
+# Python artifacts - keep ignored
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.Python
+**/pip-log.txt
+**/*.egg-info/
+**/.pytest_cache/
+
+# IDE and system files - keep ignored
+**/.vscode/
+**/.idea/
+**/*.swp
+**/*.swo
+**/*~
+**/.DS_Store
+**/Thumbs.db
+
+# Project files - keep ignored
+*.docx
+*.xlsx
+*.xls
+*.tsv
+*.json
+*.md
+!README.md
+*.py
+*.txt
+!requirements.txt
+
+# Keep credentials and config files private
+**/credentials.json
+**/token.json
+**/.env
+**/config.ini
+
