@@ -1,2 +1,0 @@
-ClinicalCaseSchema
-jsd
